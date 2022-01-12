@@ -9,5 +9,7 @@ namespace Entities.Concrete
         public string Name { get; set; } 
 
         public decimal Price { get; set; } //Min 20 TL
+
+        public bool IsActive { get; set; } 
     }
 }

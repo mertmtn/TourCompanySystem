@@ -12,6 +12,8 @@ namespace Entities.Concrete
         public int LanguageId { get; set; }
 
         public string Name { get; set; }
+
+        public bool IsActive { get; set; }
         public ICollection<Guide> Guides { get; set; }
     }
 }
