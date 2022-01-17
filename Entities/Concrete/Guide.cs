@@ -10,8 +10,8 @@ namespace Entities.Concrete
         }
 
         public int GuideId { get; set; }  
-        public string Name { get; set;} 
-
+        public string Name { get; set;}
+        
         public string Surname { get; set; }
 
         public char Gender { get; set; } 
@@ -21,5 +21,7 @@ namespace Entities.Concrete
         public bool IsActive { get; set; }
 
         public ICollection<Language> Languages { get; set; }
+
+        public Tour Tour { get; set; }
     }
 }

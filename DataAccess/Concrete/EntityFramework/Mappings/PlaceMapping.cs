@@ -11,6 +11,7 @@ namespace DataAccess.Concrete.EntityFramework.Mappings
             builder.HasKey(p => p.PlaceId);
             builder.Property(p => p.PlaceId).ValueGeneratedOnAdd();
             builder.Property(p => p.Name).HasMaxLength(30).IsRequired();
+            builder.HasMany(t => t.Tours).WithMany(t => t.Places);
         }
     }
 }

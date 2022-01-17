@@ -1,40 +1,66 @@
-﻿@model Entities.Concrete.Language
+﻿@model TourCompany.Web.Models.ViewModels.LanguageCreateOrEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+ 
 
-<h1>Edit</h1>
+<div class="container">
 
-<h4>Language</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <h4>Yabancı Dil Güncelleme</h4>
+    <div>
+        <a asp-action="Index" class="btn btn-primary px-4">Yabancı diller listesine git</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="LanguageId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                        <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Dil Adı</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        
+
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Aktif Mi?</h6>
+                            </div><div class="col-sm-9 text-secondary">
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="IsActive" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="submit" value="Kaydet" class="btn btn-primary px-4" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                    </div> 
+
+                </div>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -21,12 +21,9 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new TouristMapping());
             modelBuilder.ApplyConfiguration(new CountryMapping());
             modelBuilder.ApplyConfiguration(new NationalityMapping());
-            
-            //TODO: Will be applied
-            //modelBuilder.ApplyConfiguration(new TourMapping());
-            //modelBuilder.ApplyConfiguration(new InvoiceMapping());
-            //modelBuilder.ApplyConfiguration(new TourDetailMapping());
-            //modelBuilder.ApplyConfiguration(new InvoiceDetailMapping());
+            modelBuilder.ApplyConfiguration(new TourMapping());  
+            modelBuilder.ApplyConfiguration(new InvoiceMapping());
+            modelBuilder.ApplyConfiguration(new InvoiceDetailMapping());
         }
 
         public DbSet<Guide> Guides { get; set; }
@@ -37,13 +34,11 @@ namespace DataAccess.Concrete.EntityFramework
 
         public DbSet<Place> Places { get; set; }
 
-        //public DbSet<Tour> Tours { get; set; }
+        public DbSet<Tour> Tours { get; set; }     
 
-        //public DbSet<TourDetail> TourDetails { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
 
-        //public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
-
-        //public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
 
         public DbSet<Country> Countries { get; set; }
 

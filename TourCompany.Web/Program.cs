@@ -2,16 +2,39 @@ using Business.Abstract;
 using Business.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddDbContext<TourCompanyDbContext>();
-
+builder.Services.AddFluentValidation(fv => fv.DisableDataAnnotationsValidation = true);
 
 builder.Services.AddTransient<IGuideService, GuideManager>();
 builder.Services.AddSingleton<IGuideDal, EfGuideDal>();
+
+builder.Services.AddTransient<ILanguageService, LanguageManager>();
+builder.Services.AddSingleton<ILanguageDal, EfLanguageDal>();
+
+builder.Services.AddTransient<IPlaceService, PlaceManager>();
+builder.Services.AddSingleton<IPlaceDal, EfPlaceDal>();
+builder.Services.AddTransient<IPlaceService, PlaceManager>();
+builder.Services.AddSingleton<IPlaceDal, EfPlaceDal>();
+
+builder.Services.AddTransient<ITourService, TourManager>();
+builder.Services.AddSingleton<ITourDal, EfTourDal>();
+
+builder.Services.AddTransient<ITouristService, TouristManager>();
+builder.Services.AddSingleton<ITouristDal, EfTouristDal>();
+
+builder.Services.AddTransient<INationalityService, NationalityManager>();
+builder.Services.AddSingleton<INationalityDal, EfNationalityDal>();
+
+builder.Services.AddTransient<ICountryService, CountryManager>();
+builder.Services.AddSingleton<ICountryDal, EfCountryDal>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

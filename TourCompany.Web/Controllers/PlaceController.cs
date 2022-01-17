@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Entities.Concrete;
 using Business.Abstract;
+using TourCompany.Web.Models.ViewModels;
+using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
@@ -39,14 +41,29 @@ namespace TourCompany.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("PlaceId,Name,Price,IsActive")] Place place)
+        public IActionResult Create(PlaceCreateOrEditViewModel placeViewModel)
         {
-            if (ModelState.IsValid)
+            var result = new PlaceValidator().Validate(placeViewModel);
+            if (result.IsValid)
             {
-                _placeService.Add(place);
+                Place guide = new()
+                {
+                    IsActive = placeViewModel.IsActive,
+                    Name = placeViewModel.Name,
+                    Price = placeViewModel.Price.Value                    
+                };
+
+                _placeService.Add(guide);
                 return RedirectToAction(nameof(Index));
             }
-            return View(place);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+            }
+            return View(placeViewModel);
         }
 
         [HttpGet]
@@ -56,40 +73,62 @@ namespace TourCompany.Web.Controllers
 
             Place place = _placeService.GetById(id.Value);
 
-            return (place != null) ? View(place) : NotFound();
+            if (place != null)
+            {
+                return View(new PlaceCreateOrEditViewModel()
+                {
+                    PlaceId = place.PlaceId,
+                    IsActive = place.IsActive,
+                    Name = place.Name,
+                    Price = place.Price
+                });
+            }
+            return NotFound();
         }
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("PlaceId,Name,Price,IsActive")] Place place)
+        public IActionResult Edit(int id, PlaceCreateOrEditViewModel placeViewModel)
         {
-            if (id != place.PlaceId)
+            if (id != placeViewModel.PlaceId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var result = new PlaceValidator().Validate(placeViewModel);
+            if (result.IsValid)
             {
                 try
                 {
+                    Place place = new()
+                    {
+                        PlaceId = placeViewModel.PlaceId,
+                        IsActive = placeViewModel.IsActive,
+                        Name = placeViewModel.Name,
+                        Price = placeViewModel.Price.Value
+                    };
                     _placeService.Update(place);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlaceExists(place.PlaceId))
+                    if (!PlaceExists(placeViewModel.PlaceId))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(placeViewModel);
             }
-            return View(place);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(placeViewModel);
+            }
         }
-       
+
         public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();

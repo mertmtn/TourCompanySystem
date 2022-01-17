@@ -1,0 +1,123 @@
+﻿@model TourCompany.Web.Models.ViewModels.TourCreateOrEditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container">
+
+    <h4>Tur Güncelle</h4>
+    <div>
+        <a asp-action="Index" class="btn btn-primary px-4">Tur listesine git</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="TourId" />
+                        <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Adı</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Tur Tarihi</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="TourDate" class="form-control" type="datetime" />
+                                <span asp-validation-for="TourDate" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                                                <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Tur Rehberi</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <select asp-for="GuideId" class="selectpicker" data-live-search="true">
+                                    @if (Model != null && Model.Guides.Count > 0)
+                                    {
+                                        foreach (var guide in Model.Guides)
+                                        {
+                                                    <option value="@guide.GuideId">@guide.Name @guide.Surname</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Aktif Mi?</h6>
+                            </div><div class="col-sm-9 text-secondary">
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="IsActive" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Yabancı Dil Bilgisi</h6>
+                            </div><div class="col-sm-9 text-secondary">
+                                <select asp-for="SelectedPlaces" class="selectpicker" multiple data-actions-box="true" data-live-search="true" data-max-options="3">
+                                    @if (Model != null && Model.Places.Count > 0)
+                                    {
+                                        foreach (var place in Model.Places)
+                                        {
+                                                    <option value="@place.PlaceId"  selected=@(Model.SelectedPlaces.Contains(place.PlaceId.ToString()))>@place.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="submit" value="Kaydet" class="btn btn-primary px-4" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+ <script>
+     $(document).ready(function() {
+      $('.my-select').selectpicker();
+    });
+</script>

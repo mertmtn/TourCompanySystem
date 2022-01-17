@@ -11,6 +11,7 @@ namespace DataAccess.Concrete.EntityFramework.Mappings
             builder.HasKey(n => n.NationalityId);
             builder.Property(n => n.NationalityId).ValueGeneratedOnAdd();
             builder.Property(n => n.Name).HasMaxLength(50).IsRequired();
+          
         }
     }
 }

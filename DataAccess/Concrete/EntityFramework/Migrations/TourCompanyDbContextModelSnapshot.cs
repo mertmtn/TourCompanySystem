@@ -30,6 +30,9 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryId"), 1L, 1);
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -74,6 +77,47 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
                     b.ToTable("Guides");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Invoice", b =>
+                {
+                    b.Property<string>("InvoiceNo")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TouristId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvoiceNo");
+
+                    b.HasIndex("TouristId")
+                        .IsUnique();
+
+                    b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.InvoiceDetail", b =>
+                {
+                    b.Property<string>("InvoiceNo")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TourId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Discount")
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("InvoiceNo", "TourId");
+
+                    b.HasIndex("TourId")
+                        .IsUnique();
+
+                    b.ToTable("InvoiceDetails");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Language", b =>
                 {
                     b.Property<int>("LanguageId")
@@ -102,6 +146,9 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NationalityId"), 1L, 1);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -137,6 +184,36 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
                     b.ToTable("Places");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Tour", b =>
+                {
+                    b.Property<int>("TourId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TourId"), 1L, 1);
+
+                    b.Property<int>("GuideId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("TourDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("TourId");
+
+                    b.HasIndex("GuideId")
+                        .IsUnique();
+
+                    b.ToTable("Tours");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Tourist", b =>
                 {
                     b.Property<int>("TouristId")
@@ -170,6 +247,10 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
 
                     b.HasKey("TouristId");
 
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("NationalityId");
+
                     b.ToTable("Tourists");
                 });
 
@@ -188,6 +269,96 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
                     b.ToTable("GuideLanguage");
                 });
 
+            modelBuilder.Entity("PlaceTour", b =>
+                {
+                    b.Property<int>("PlacesPlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToursTourId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlacesPlaceId", "ToursTourId");
+
+                    b.HasIndex("ToursTourId");
+
+                    b.ToTable("PlaceTour");
+                });
+
+            modelBuilder.Entity("TourTourist", b =>
+                {
+                    b.Property<int>("TouristsTouristId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToursTourId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TouristsTouristId", "ToursTourId");
+
+                    b.HasIndex("ToursTourId");
+
+                    b.ToTable("TourTourist");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Invoice", b =>
+                {
+                    b.HasOne("Entities.Concrete.Tourist", "Tourist")
+                        .WithOne("Invoice")
+                        .HasForeignKey("Entities.Concrete.Invoice", "TouristId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tourist");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.InvoiceDetail", b =>
+                {
+                    b.HasOne("Entities.Concrete.Invoice", "Invoice")
+                        .WithMany("InvoiceDetails")
+                        .HasForeignKey("InvoiceNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.Tour", "Tour")
+                        .WithOne("InvoiceDetail")
+                        .HasForeignKey("Entities.Concrete.InvoiceDetail", "TourId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Tour");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Tour", b =>
+                {
+                    b.HasOne("Entities.Concrete.Guide", "Guide")
+                        .WithOne("Tour")
+                        .HasForeignKey("Entities.Concrete.Tour", "GuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Guide");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Tourist", b =>
+                {
+                    b.HasOne("Entities.Concrete.Country", "Country")
+                        .WithMany("Tourists")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.Nationality", "Nationality")
+                        .WithMany("Tourists")
+                        .HasForeignKey("NationalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Nationality");
+                });
+
             modelBuilder.Entity("GuideLanguage", b =>
                 {
                     b.HasOne("Entities.Concrete.Guide", null)
@@ -200,6 +371,69 @@ namespace DataAccess.Concrete.EntityFramework.Migrations
                         .WithMany()
                         .HasForeignKey("LanguagesLanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PlaceTour", b =>
+                {
+                    b.HasOne("Entities.Concrete.Place", null)
+                        .WithMany()
+                        .HasForeignKey("PlacesPlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.Tour", null)
+                        .WithMany()
+                        .HasForeignKey("ToursTourId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TourTourist", b =>
+                {
+                    b.HasOne("Entities.Concrete.Tourist", null)
+                        .WithMany()
+                        .HasForeignKey("TouristsTouristId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.Tour", null)
+                        .WithMany()
+                        .HasForeignKey("ToursTourId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Country", b =>
+                {
+                    b.Navigation("Tourists");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Guide", b =>
+                {
+                    b.Navigation("Tour")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Invoice", b =>
+                {
+                    b.Navigation("InvoiceDetails");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Nationality", b =>
+                {
+                    b.Navigation("Tourists");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Tour", b =>
+                {
+                    b.Navigation("InvoiceDetail")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Tourist", b =>
+                {
+                    b.Navigation("Invoice")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using System.Linq.Expressions;
 
 namespace Business.Concrete
 {
@@ -21,11 +22,11 @@ namespace Business.Concrete
         public void Delete(Place place)
         {
             _placeDal.Delete(place);
-        }
-
-        public List<Place> GetAll()
+        } 
+        
+        public List<Place> GetAll(Expression<Func<Place, bool>> filter = null)
         {
-            return _placeDal.GetAll();
+            return _placeDal.GetAll(filter);
         }
 
         public Place GetById(int id)

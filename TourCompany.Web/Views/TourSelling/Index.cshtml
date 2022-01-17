@@ -1,0 +1,63 @@
+﻿@model TourCompany.Web.Models.ViewModels.TourSellingCreateOrEditViewModel
+
+
+
+<div class="container">
+
+    <h4>Tur Satışı</h4>
+    <div>
+        <a asp-action="Index" class="btn btn-primary px-4">Rehber listesine git</a>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Index">
+                        @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+                        <input type="hidden" asp-for="TouristId" />
+                        <div class="form-group">
+                            <select asp-for="SelectedTours" class="selectpicker" multiple data-actions-box="true" data-live-search="true" data-max-options="3">
+                                @if (Model != null && Model.Tours.Count > 0)
+                                {
+                                    foreach (var tour in Model.Tours)
+                                    {
+                                        <option value="@tour.TourId">@tour.Name - @tour.TourDate.ToShortDateString()</option>
+                                    }
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="submit" value="Kaydet" class="btn btn-primary px-4" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<script>
+     $(document).ready(function() {
+      $('.my-select').selectpicker();
+    });
+</script>

@@ -1,149 +1,150 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Business.Abstract;
+using TourCompany.Web.Models.ViewModels;
+using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
     public class LanguageController : Controller
     {
-        private readonly TourCompanyDbContext _context;
+        private readonly ILanguageService _languageService;
 
-        public LanguageController(TourCompanyDbContext context)
+        public LanguageController(ILanguageService languageService)
         {
-            _context = context;
+            _languageService = languageService;
         }
 
-        // GET: Language
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-            return View(await _context.Languages.ToListAsync());
+            return View(_languageService.GetAll());
         }
 
-        // GET: Language/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var language = await _context.Languages
-                .FirstOrDefaultAsync(m => m.LanguageId == id);
-            if (language == null)
-            {
-                return NotFound();
-            }
+            Language language = _languageService.GetById(id.Value);
 
-            return View(language);
+            return (language != null) ? View(language) : NotFound();
         }
 
-        // GET: Language/Create
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Language/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LanguageId,Name,IsActive")] Language language)
+        public IActionResult Create(LanguageCreateOrEditViewModel languageViewModel)
         {
-            if (ModelState.IsValid)
+            var result = new LanguageValidator().Validate(languageViewModel);
+            if (result.IsValid)
             {
-                _context.Add(language);
-                await _context.SaveChangesAsync();
+                _languageService.Add(new Language()
+                {
+                    Name = languageViewModel.Name,
+                    IsActive = languageViewModel.IsActive
+                });
                 return RedirectToAction(nameof(Index));
             }
-            return View(language);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+            }
+            return View(languageViewModel);
         }
 
-        // GET: Language/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+        public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var language = await _context.Languages.FindAsync(id);
-            if (language == null)
+            Language language = _languageService.GetById(id.Value);
+            if (language != null)
             {
-                return NotFound();
+                return View(new LanguageCreateOrEditViewModel()
+                {
+                    LanguageId = language.LanguageId,
+                    Name = language.Name,
+                    IsActive = language.IsActive
+                });
             }
-            return View(language);
+            return NotFound();
         }
 
-        // POST: Language/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LanguageId,Name,IsActive")] Language language)
+        public IActionResult Edit(int id, LanguageCreateOrEditViewModel languageViewModel)
         {
-            if (id != language.LanguageId)
+            if (id != languageViewModel.LanguageId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var result = new LanguageValidator().Validate(languageViewModel);
+            if (result.IsValid)
             {
                 try
                 {
-                    _context.Update(language);
-                    await _context.SaveChangesAsync();
+                    _languageService.Update(new Language()
+                    {
+                        LanguageId = languageViewModel.LanguageId,
+                        Name = languageViewModel.Name,
+                        IsActive = languageViewModel.IsActive
+                    });
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LanguageExists(language.LanguageId))
+                    if (!LanguageExists(languageViewModel.LanguageId))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(languageViewModel);
             }
-            return View(language);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(languageViewModel);
+            }
         }
 
-        // GET: Language/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var language = await _context.Languages
-                .FirstOrDefaultAsync(m => m.LanguageId == id);
-            if (language == null)
-            {
-                return NotFound();
-            }
-
-            return View(language);
+            if (id == null) return NotFound();
+            Language language = _languageService.GetById(id.Value);
+            return (language != null) ? View(language) : NotFound();
         }
 
-        // POST: Language/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var language = await _context.Languages.FindAsync(id);
-            _context.Languages.Remove(language);
-            await _context.SaveChangesAsync();
+            Language language = _languageService.GetById(id);
+            _languageService.Delete(language);
             return RedirectToAction(nameof(Index));
         }
 
         private bool LanguageExists(int id)
         {
-            return _context.Languages.Any(e => e.LanguageId == id);
+            return _languageService.GetById(id) != null;
         }
     }
 }

@@ -1,25 +1,21 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Business.Abstract;
+using TourCompany.Web.Models.ViewModels;
+using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
     public class GuideController : Controller
     {
-        private readonly TourCompanyDbContext _context;
+        private readonly ILanguageService _languageService;
         private readonly IGuideService _guideService;
 
-        public GuideController(TourCompanyDbContext context, IGuideService guideService)
+        public GuideController(ILanguageService languageService, IGuideService guideService)
         {
-            _context = context;
+            _languageService = languageService;
             _guideService = guideService;
         }
 
@@ -29,12 +25,10 @@ namespace TourCompany.Web.Controllers
             return View(_guideService.GetAll());
         }
         
-
-        //TO DO: detay getirirken bildiği yabancı diller çekilmelidir.
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
-           
+
             Guide guide = _guideService.GetById(id.Value);
 
             return (guide != null) ? View(guide) : NotFound();
@@ -43,111 +37,132 @@ namespace TourCompany.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new GuideCreateOrEditViewModel { Languages = _languageService.GetAll() });
         }
 
-        // POST: Guide/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GuideId,Name,Surname,Gender,PhoneNumber,IsActive")] Guide guide)
+        public IActionResult Create(GuideCreateOrEditViewModel guideViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var language = _context.Languages.Find(1);
-                guide.Languages.Add(language);
-                _context.Add(guide);
 
-                await _context.SaveChangesAsync();
+            var result = new GuideValidator().Validate(guideViewModel);
+            if (result.IsValid)
+            {
+                Guide guide = new()
+                {
+                    IsActive = guideViewModel.IsActive,
+                    Name = guideViewModel.Name,
+                    Surname = guideViewModel.Surname,
+                    PhoneNumber = guideViewModel.PhoneNumber,
+                    Gender = guideViewModel.Gender
+                };
+
+                _guideService.Add(guide, guideViewModel.SelectedLanguages);
                 return RedirectToAction(nameof(Index));
             }
-            return View(guide);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }               
+            }
+            return View(guideViewModel);
         }
 
-        // GET: Guide/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var guide = await _context.Guides.FindAsync(id);
-            if (guide == null)
+            Guide guide = _guideService.GetById(id.Value);
+
+            if (guide != null)
             {
-                return NotFound();
+                return View(new GuideCreateOrEditViewModel()
+                {
+                    Languages = _languageService.GetAll(),
+                    SelectedLanguages = guide.Languages.Select(x => x.LanguageId.ToString()).ToArray(),
+                    Gender = guide.Gender,
+                    PhoneNumber = guide.PhoneNumber,
+                    Name = guide.Name,
+                    Surname = guide.Surname,
+                    IsActive = guide.IsActive,
+                    GuideId = guide.GuideId
+                });
             }
-            return View(guide);
+            return NotFound();
         }
 
-        // POST: Guide/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GuideId,Name,Surname,Gender,PhoneNumber,IsActive")] Guide guide)
+        public IActionResult Edit(int id, GuideCreateOrEditViewModel guideViewModel)
         {
-            if (id != guide.GuideId)
+            if (id != guideViewModel.GuideId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var result = new GuideValidator().Validate(guideViewModel);
+            if (result.IsValid)
             {
                 try
                 {
-                    _context.Update(guide);
-                    await _context.SaveChangesAsync();
+                    Guide guide = new()
+                    {
+                        GuideId = guideViewModel.GuideId,
+                        IsActive = guideViewModel.IsActive,
+                        Name = guideViewModel.Name,
+                        Surname = guideViewModel.Surname,
+                        PhoneNumber = guideViewModel.PhoneNumber,
+                        Gender = guideViewModel.Gender
+                    };
+                    _guideService.Update(guide, guideViewModel.SelectedLanguages);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GuideExists(guide.GuideId))
+                    if (!GuideExists(guideViewModel.GuideId))
                     {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    } 
                 }
-                return RedirectToAction(nameof(Index));
+                return View(guideViewModel);                
             }
-            return View(guide);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(guideViewModel);
+            }           
         }
 
-        // GET: Guide/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var guide = await _context.Guides
-                .FirstOrDefaultAsync(m => m.GuideId == id);
-            if (guide == null)
-            {
-                return NotFound();
-            }
+            Guide guide = _guideService.GetById(id.Value);
 
-            return View(guide);
+            return (guide != null) ? View(guide) : NotFound();
         }
 
-        // POST: Guide/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var guide = await _context.Guides.FindAsync(id);
-            _context.Guides.Remove(guide);
-            await _context.SaveChangesAsync();
+            Guide guide = _guideService.GetById(id);
+            _guideService.Delete(guide);
             return RedirectToAction(nameof(Index));
         }
 
         private bool GuideExists(int id)
         {
-            return _context.Guides.Any(e => e.GuideId == id);
+            return _guideService.GetById(id) != null;
         }
     }
 }

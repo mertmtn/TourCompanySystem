@@ -13,6 +13,16 @@ namespace Business.Concrete
             _guideDal = guideDal;
         }
 
+        public void Add(Guide guide, string[] selectedLanguages)
+        {
+            _guideDal.AddManyLanguages(guide, selectedLanguages);
+        }
+
+        public void Delete(Guide guide)
+        {
+            _guideDal.DeleteManyLanguages(guide);
+        }
+
         public List<Guide> GetAll()
         {
             return _guideDal.GetAll();
@@ -20,7 +30,12 @@ namespace Business.Concrete
 
         public Guide GetById(int id)
         {
-            return _guideDal.Get(g=>g.GuideId==id);
+            return _guideDal.GetById(id);
+        }
+
+        public void Update(Guide guide, string[] selectedLanguages)
+        {
+            _guideDal.UpdateManyLanguages(guide, selectedLanguages);
         }
     }
 }

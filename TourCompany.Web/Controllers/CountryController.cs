@@ -1,154 +1,152 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Business.Abstract;
+using TourCompany.Web.Models.Validation;
+using TourCompany.Web.Models.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace TourCompany.Web.Controllers
 {
     public class CountryController : Controller
     {
-        private readonly TourCompanyDbContext _context;
+        private readonly ICountryService _countryService;
 
-        public CountryController(TourCompanyDbContext context)
+        public CountryController(ICountryService countryService)
         {
-            _context = context;
+            _countryService = countryService;
         }
 
-        // GET: Country
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-            return View(await _context.Countries.ToListAsync());
+            return View(_countryService.GetAll());
         }
 
-        // GET: Country/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.CountryId == id);
-            if (country == null)
-            {
-                return NotFound();
-            }
+            Country country = _countryService.GetById(id.Value);
 
-            return View(country);
+            return (country != null) ? View(country) : NotFound();
         }
 
-        // GET: Country/Create
+
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Country/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CountryId,Name")] Country country)
+        public IActionResult Create(CountryCreateOrEditViewModel countryViewModel)
         {
-            if (ModelState.IsValid)
+            var result = new CountryValidator().Validate(countryViewModel);
+            if (result.IsValid)
             {
-                _context.Add(country);
-                await _context.SaveChangesAsync();
+                _countryService.Add(new Country()
+                {
+                    Name = countryViewModel.Name,
+                    IsActive = countryViewModel.IsActive
+                });
                 return RedirectToAction(nameof(Index));
             }
-            return View(country);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+            }
+            return View(countryViewModel);
         }
 
-        // GET: Country/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+        public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var country = await _context.Countries.FindAsync(id);
-            if (country == null)
+            Country country = _countryService.GetById(id.Value);
+
+            if (country != null)
             {
-                return NotFound();
+                return View(new CountryCreateOrEditViewModel()
+                {
+                    Name = country.Name,
+                    CountryId = country.CountryId,
+                    IsActive = country.IsActive
+                });
             }
-            return View(country);
+            return NotFound();
         }
 
-        // POST: Country/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CountryId,Name")] Country country)
+        public IActionResult Edit(int? id, CountryCreateOrEditViewModel countryViewModel)
         {
-            if (id != country.CountryId)
+            if (id != countryViewModel.CountryId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var result = new CountryValidator().Validate(countryViewModel);
+            if (result.IsValid)
             {
                 try
                 {
-                    _context.Update(country);
-                    await _context.SaveChangesAsync();
+                    _countryService.Update(new Country()
+                    {
+                        Name = countryViewModel.Name,
+                        CountryId = countryViewModel.CountryId,
+                        IsActive = countryViewModel.IsActive
+                    });
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CountryExists(country.CountryId))
+                    if (!CountryExists(countryViewModel.CountryId))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(countryViewModel);
             }
-            return View(country);
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(countryViewModel);
+            }
         }
 
-        // GET: Country/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.CountryId == id);
-            if (country == null)
-            {
-                return NotFound();
-            }
+            Country country = _countryService.GetById(id.Value);
 
-            return View(country);
+            return (country != null) ? View(country) : NotFound();
         }
 
-        // POST: Country/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var country = await _context.Countries.FindAsync(id);
-            _context.Countries.Remove(country);
-            await _context.SaveChangesAsync();
+            Country country = _countryService.GetById(id);
+            _countryService.Delete(country);
             return RedirectToAction(nameof(Index));
         }
 
         private bool CountryExists(int id)
         {
-            return _context.Countries.Any(e => e.CountryId == id);
+            return _countryService.GetById(id) != null;
         }
     }
 }

@@ -1,0 +1,73 @@
+﻿@model Entities.Concrete.Invoice
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Fatura No
+        </dt>
+        <dd class="col-sm-10">
+            @Model.InvoiceNo
+        </dd>
+        <dt class="col-sm-2">
+           Fatura Tarihi
+        </dt>
+        <dd class="col-sm-10">
+            @Model.InvoiceDate
+        </dd>
+        <dt class="col-sm-2">
+            Turist Ad/Soyad
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Tourist.Name  @Model.Tourist.Surname
+        </dd>
+        <dt class="col-sm-2">
+            Toplam Ücret
+        </dt>
+        <dd class="col-sm-10">
+            @Model.InvoiceDetails.Sum(x=>(decimal)(1-x.Discount)*(x.Price))  @Model.Tourist.Tours.Count
+        </dd>
+    </dl>
+
+    <table class="table">
+        <thead>
+            <tr>
+               <th>
+                    Tur Adı
+                </th>
+                <th>
+                    İndirim
+                </th>
+                <th>
+                    Ücret
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.InvoiceDetails)
+            {
+                <tr>
+                    <td>
+                        @item.Tour.Name
+                    </td>
+                    <td>
+                        @item.Discount
+                    </td>
+                    <td>
+                        @item.Price
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

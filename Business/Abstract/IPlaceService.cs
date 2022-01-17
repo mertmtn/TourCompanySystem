@@ -1,10 +1,11 @@
 ﻿using Entities.Concrete;
+using System.Linq.Expressions;
 
 namespace Business.Abstract
 {
     public interface IPlaceService
     {
-        List<Place> GetAll();
+        List<Place> GetAll(Expression<Func<Place, bool>> filter = null);
 
         Place GetById(int id);
 

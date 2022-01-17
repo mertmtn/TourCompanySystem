@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Entities.Concrete.Invoice>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.InvoiceNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InvoiceDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tourist)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.InvoiceNo
+                </td>
+                <td>
+                    @item.InvoiceDate
+                </td>
+                <td>
+                    @item.Tourist.Name @item.Tourist.Surname
+                </td>
+                 
+                <td>                 
+                    <a asp-action="Details" asp-route-id="@item.InvoiceNo">Details</a>                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
