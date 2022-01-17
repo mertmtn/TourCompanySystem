@@ -25,6 +25,9 @@ builder.Services.AddSingleton<IPlaceDal, EfPlaceDal>();
 builder.Services.AddTransient<ITourService, TourManager>();
 builder.Services.AddSingleton<ITourDal, EfTourDal>();
 
+builder.Services.AddTransient<IInvoiceService, InvoiceManager>();
+builder.Services.AddSingleton<IInvoiceDal, EfInvoiceDal>();
+
 builder.Services.AddTransient<ITouristService, TouristManager>();
 builder.Services.AddSingleton<ITouristDal, EfTouristDal>();
 
