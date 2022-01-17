@@ -49,7 +49,7 @@ namespace TourCompany.Web.Controllers
             try
             {                
                 _touristService.UpdateForAddTours(id.Value, tourSellingViewModel.SelectedTours);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), nameof(Invoice));
             }
             catch (DbUpdateConcurrencyException)
             {

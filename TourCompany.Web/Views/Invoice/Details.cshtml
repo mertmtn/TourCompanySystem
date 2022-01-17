@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+ 
 
 <div>
-    <h4>Invoice</h4>
+    <h4>Fatura Detay</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -33,7 +33,7 @@
             Toplam Ücret
         </dt>
         <dd class="col-sm-10">
-            @Model.InvoiceDetails.Sum(x=>(decimal)(1-x.Discount)*(x.Price))  @Model.Tourist.Tours.Count
+            @Model.InvoiceDetails.Sum(x=>(decimal)(1-x.Discount)*(x.Price)) 
         </dd>
     </dl>
 
