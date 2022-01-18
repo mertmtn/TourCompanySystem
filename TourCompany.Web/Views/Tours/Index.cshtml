@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<Entities.Concrete.Tour>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tur Listesi | Tour Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Tur Listesi</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a role="button" class="btn btn-primary" asp-action="Create">Yeni Tur Tanım</a>
 </p>
 <table class="table">
     <thead>
@@ -32,12 +32,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.TourDate)
             </td>
-            
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TourId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TourId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TourId">Delete</a>
+                        <td>
+                <a role="button" class="btn btn-warning"  asp-action="Edit" asp-route-id="@item.TourId">Düzenle</a> 
+                <a role="button" class="btn btn-info" asp-action="Details" asp-route-id="@item.TourId">Detay</a> 
+                <a role="button" class="btn btn-danger"  asp-action="Delete" asp-route-id="@item.TourId">Sil</a>
             </td>
+            
         </tr>
 }
     </tbody>

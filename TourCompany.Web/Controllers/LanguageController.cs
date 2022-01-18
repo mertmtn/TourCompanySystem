@@ -29,7 +29,7 @@ namespace TourCompany.Web.Controllers
 
             Language language = _languageService.GetById(id.Value);
 
-            return (language != null) ? View(language) : NotFound();
+            return (language != null) ? PartialView("~/Views/Language/Partials/Detail.cshtml", language) : NotFound();
         }
 
 
@@ -54,13 +54,12 @@ namespace TourCompany.Web.Controllers
                 });
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+
             return View(languageViewModel);
         }
 
@@ -114,14 +113,13 @@ namespace TourCompany.Web.Controllers
                 }
                 return View(languageViewModel);
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-                return View(languageViewModel);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+            return View(languageViewModel);
+
         }
 
 
@@ -129,7 +127,7 @@ namespace TourCompany.Web.Controllers
         {
             if (id == null) return NotFound();
             Language language = _languageService.GetById(id.Value);
-            return (language != null) ? View(language) : NotFound();
+            return (language != null) ? PartialView("~/Views/Language/Partials/Delete.cshtml", language) : NotFound();
         }
 
 

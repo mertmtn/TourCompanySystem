@@ -24,13 +24,11 @@ namespace TourCompany.Web.Controllers
         {
             return View(_guideService.GetAll());
         }
-        
+
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
-
             Guide guide = _guideService.GetById(id.Value);
-
             return (guide != null) ? View(guide) : NotFound();
         }
 
@@ -45,9 +43,8 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(GuideCreateOrEditViewModel guideViewModel)
         {
-
-            var result = new GuideValidator().Validate(guideViewModel);
-            if (result.IsValid)
+            var validationResult = new GuideValidator().Validate(guideViewModel);
+            if (validationResult.IsValid)
             {
                 Guide guide = new()
                 {
@@ -61,13 +58,12 @@ namespace TourCompany.Web.Controllers
                 _guideService.Add(guide, guideViewModel.SelectedLanguages);
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in validationResult.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }               
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+            guideViewModel.Languages = _languageService.GetAll();
             return View(guideViewModel);
         }
 
@@ -99,13 +95,10 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, GuideCreateOrEditViewModel guideViewModel)
         {
-            if (id != guideViewModel.GuideId)
-            {
-                return NotFound();
-            }
+            if (id != guideViewModel.GuideId) return NotFound();
 
-            var result = new GuideValidator().Validate(guideViewModel);
-            if (result.IsValid)
+            var validationResult = new GuideValidator().Validate(guideViewModel);
+            if (validationResult.IsValid)
             {
                 try
                 {
@@ -126,18 +119,17 @@ namespace TourCompany.Web.Controllers
                     if (!GuideExists(guideViewModel.GuideId))
                     {
                         return NotFound();
-                    } 
+                    }
                 }
-                return View(guideViewModel);                
             }
-            else
+
+            foreach (var error in validationResult.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-                return View(guideViewModel);
-            }           
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+
+            guideViewModel.Languages = _languageService.GetAll();
+            return View(guideViewModel);
         }
 
 

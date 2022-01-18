@@ -1,26 +1,22 @@
 ﻿@model IEnumerable<Entities.Concrete.Invoice>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Fatura Listesi | Tour Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Fatura Listesi</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+ 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.InvoiceNo)
+                Fatura No
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.InvoiceDate)
-            </th>
-        
-           
+                Fatura Kesim Tarihi
+            </th> 
             <th></th>
         </tr>
     </thead>
@@ -33,11 +29,9 @@
                 </td>
                 <td>
                     @item.InvoiceDate
-                </td>
-               
-                 
+                </td>      
                 <td>                 
-                    <a asp-action="Details" asp-route-id="@item.InvoiceNo">Details</a>                   
+                    <a role="button" class="btn btn-info"  asp-action="Details" asp-route-id="@item.InvoiceNo">Fatura Detay</a>                   
                 </td>
             </tr>
         }

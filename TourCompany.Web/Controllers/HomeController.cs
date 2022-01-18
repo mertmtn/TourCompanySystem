@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using TourCompany.Web.Models;
 
 namespace TourCompany.Web.Controllers
 {

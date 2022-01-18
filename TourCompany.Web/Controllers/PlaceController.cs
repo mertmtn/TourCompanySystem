@@ -10,10 +10,10 @@ namespace TourCompany.Web.Controllers
 {
     public class PlaceController : Controller
     {
-        
+
         private readonly IPlaceService _placeService;
         public PlaceController(IPlaceService placeService)
-        {          
+        {
             _placeService = placeService;
         }
 
@@ -50,19 +50,18 @@ namespace TourCompany.Web.Controllers
                 {
                     IsActive = placeViewModel.IsActive,
                     Name = placeViewModel.Name,
-                    Price = placeViewModel.Price.Value                    
+                    Price = placeViewModel.Price.Value
                 };
 
                 _placeService.Add(guide);
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+
             return View(placeViewModel);
         }
 
@@ -85,7 +84,7 @@ namespace TourCompany.Web.Controllers
             }
             return NotFound();
         }
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, PlaceCreateOrEditViewModel placeViewModel)
@@ -117,16 +116,14 @@ namespace TourCompany.Web.Controllers
                         return NotFound();
                     }
                 }
-                return View(placeViewModel);
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-                return View(placeViewModel);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+            return View(placeViewModel);
+
         }
 
         public IActionResult Delete(int? id)
@@ -137,7 +134,7 @@ namespace TourCompany.Web.Controllers
 
             return (place != null) ? View(place) : NotFound();
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)

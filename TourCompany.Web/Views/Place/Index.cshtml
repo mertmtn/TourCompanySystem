@@ -1,26 +1,26 @@
 ﻿@model IEnumerable<Entities.Concrete.Place>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Bölge Listesi | Tour Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Bölge Listesi</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a role="button" class="btn btn-primary" asp-action="Create">Yeni Bölge Tanım</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Bölge Adı
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Bölge Ücreti
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                Aktiflik Durumu
             </th>
             <th></th>
         </tr>
@@ -32,15 +32,15 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Price) (₺)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PlaceId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PlaceId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PlaceId">Delete</a>
+                <a role="button" class="btn btn-warning"  asp-action="Edit" asp-route-id="@item.PlaceId">Düzenle</a> 
+                <a role="button" class="btn btn-info" asp-action="Details" asp-route-id="@item.PlaceId">Detay</a> 
+                <a role="button" class="btn btn-danger"  asp-action="Delete" asp-route-id="@item.PlaceId">Sil</a>
             </td>
         </tr>
 }

@@ -1,17 +1,22 @@
 ﻿using DataAccess.Concrete.EntityFramework.Mappings;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Concrete.EntityFramework
 {
     public class TourCompanyDbContext : DbContext
     {
-       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=TourCompanyDB;Trusted_Connection=True;");
-            
-        }
+            var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+            var connectionString = configuration.GetConnectionString("SQLDBConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+        }       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

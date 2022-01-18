@@ -1,32 +1,29 @@
 ﻿@model IEnumerable<Entities.Concrete.Guide>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Rehber Listesi | Tour Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Rehber Listesi</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a role="button" class="btn btn-primary" asp-action="Create">Yeni Rehber Tanımla</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Adı
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Surname)
+                Soyadı
+            </th>             
+            <th>
+                Telefon Numarası
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+               Aktiflik Durumu
             </th>
             <th></th>
         </tr>
@@ -39,10 +36,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
+            </td>            
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
             </td>
@@ -50,9 +44,9 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.GuideId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.GuideId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.GuideId">Delete</a>
+                <a role="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.GuideId">Güncelle</a> 
+                <a role="button" class="btn btn-info" asp-action="Details" asp-route-id="@item.GuideId">Detay</a> 
+                <a role="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.GuideId">Sil</a>
             </td>
         </tr>
 }

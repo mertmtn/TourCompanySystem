@@ -10,7 +10,7 @@ using TourCompany.Web.Models.Validation;
 namespace TourCompany.Web.Controllers
 {
     public class TouristController : Controller
-    {      
+    {
         private readonly ICountryService _countryService;
         private readonly INationalityService _nationalityService;
         private readonly ITouristService _touristService;
@@ -62,20 +62,19 @@ namespace TourCompany.Web.Controllers
                 _touristService.Add(tourist);
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-            
+
+
             ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
             ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
             return View(touristViewModel);
         }
 
-         
+
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -83,11 +82,11 @@ namespace TourCompany.Web.Controllers
             var tourist = _touristService.GetById(id.Value);
             if (tourist != null)
             {
-                ViewData["CountryId"]=new SelectList(_countryService.GetAll(), "CountryId", "Name", tourist.CountryId);
+                ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", tourist.CountryId);
                 ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", tourist.NationalityId);
 
                 return View(new TouristCreateOrEditViewModel()
-                { 
+                {
                     TouristId = tourist.TouristId,
                     Name = tourist.Name,
                     BirthDate = tourist.BirthDate,
@@ -97,7 +96,7 @@ namespace TourCompany.Web.Controllers
                     Surname = tourist.Surname
                 });
             }
-            return NotFound();           
+            return NotFound();
         }
 
         [HttpPost]
@@ -125,7 +124,7 @@ namespace TourCompany.Web.Controllers
                         Surname = touristViewModel.Surname
                     };
 
-                    _touristService.Update(tourist); 
+                    _touristService.Update(tourist);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -133,22 +132,16 @@ namespace TourCompany.Web.Controllers
                     if (!TouristExists(touristViewModel.TouristId))
                     {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                } 
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    } 
                 }
-            } 
+            }
 
-            ViewData["CountryId"] =new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+
+            ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
             ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
             return View(touristViewModel);
         }

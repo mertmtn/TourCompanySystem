@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddDbContext<TourCompanyDbContext>();
+
 builder.Services.AddFluentValidation(fv => fv.DisableDataAnnotationsValidation = true);
 
 builder.Services.AddTransient<IGuideService, GuideManager>();
@@ -36,7 +37,6 @@ builder.Services.AddSingleton<INationalityDal, EfNationalityDal>();
 
 builder.Services.AddTransient<ICountryService, CountryManager>();
 builder.Services.AddSingleton<ICountryDal, EfCountryDal>();
-
 
 var app = builder.Build();
 

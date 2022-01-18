@@ -63,13 +63,12 @@ namespace TourCompany.Web.Controllers
                 _tourService.Add(tour, tourViewModel.SelectedPlaces);
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+
             return View(tourViewModel);
         }
 
@@ -114,7 +113,7 @@ namespace TourCompany.Web.Controllers
                 {
                     Tour tour = new()
                     {
-                        GuideId=tourViewModel.GuideId.Value,
+                        GuideId = tourViewModel.GuideId.Value,
                         IsActive = tourViewModel.IsActive,
                         Name = tourViewModel.Name,
                         TourDate = tourViewModel.TourDate.Value,
@@ -122,20 +121,22 @@ namespace TourCompany.Web.Controllers
                     };
 
                     _tourService.Update(tour, tourViewModel.SelectedPlaces);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!TourExists(tourViewModel.TourId))
                     {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    }                   
+                }                
             }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+
             return View(tourViewModel);
         }
 

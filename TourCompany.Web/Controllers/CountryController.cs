@@ -30,7 +30,7 @@ namespace TourCompany.Web.Controllers
 
             Country country = _countryService.GetById(id.Value);
 
-            return (country != null) ? View(country) : NotFound();
+            return (country != null) ? PartialView("~/Views/Country/Partials/Detail.cshtml", country) : NotFound();
         }
 
 
@@ -54,13 +54,12 @@ namespace TourCompany.Web.Controllers
                 });
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+
             return View(countryViewModel);
         }
 
@@ -114,14 +113,13 @@ namespace TourCompany.Web.Controllers
                 }
                 return View(countryViewModel);
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-                return View(countryViewModel);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+            return View(countryViewModel);
+
         }
 
 
@@ -131,7 +129,7 @@ namespace TourCompany.Web.Controllers
 
             Country country = _countryService.GetById(id.Value);
 
-            return (country != null) ? View(country) : NotFound();
+            return (country != null) ? PartialView("~/Views/Country/Partials/Delete.cshtml", country) : NotFound();
         }
 
 

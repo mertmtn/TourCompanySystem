@@ -30,7 +30,7 @@ namespace TourCompany.Web.Controllers
 
             Nationality nationality = _nationalityService.GetById(id.Value);
 
-            return (nationality != null) ? View(nationality) : NotFound();
+            return (nationality != null) ? PartialView("~/Views/Nationality/Partials/Detail.cshtml", nationality) : NotFound();
         }
 
         public IActionResult Create()
@@ -52,13 +52,12 @@ namespace TourCompany.Web.Controllers
                 });
                 return RedirectToAction(nameof(Index));
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+
             return View(nationalityViewModel);
         }
 
@@ -72,7 +71,9 @@ namespace TourCompany.Web.Controllers
             {
                 return View(new NationalityCreateOrEditViewModel()
                 {
-                    Name = nationality.Name,IsActive = nationality.IsActive,NationalityId= nationality.NationalityId
+                    Name = nationality.Name,
+                    IsActive = nationality.IsActive,
+                    NationalityId = nationality.NationalityId
                 });
             }
             return NotFound();
@@ -109,14 +110,13 @@ namespace TourCompany.Web.Controllers
                 }
                 return View(nationalityViewModel);
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-                return View(nationalityViewModel);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+            return View(nationalityViewModel);
+
         }
 
         public IActionResult Delete(int? id)
@@ -125,7 +125,7 @@ namespace TourCompany.Web.Controllers
 
             Nationality nationality = _nationalityService.GetById(id.Value);
 
-            return (nationality != null) ? View(nationality) : NotFound();
+            return (nationality != null) ? PartialView("~/Views/Nationality/Partials/Delete.cshtml", nationality) : NotFound();
         }
 
 
