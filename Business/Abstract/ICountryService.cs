@@ -1,4 +1,7 @@
-﻿using Entities.Concrete;
+﻿using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
+using Entities.Concrete;
+using TourCompany.Web.Models.Validation;
 
 namespace Business.Abstract
 {
@@ -8,10 +11,11 @@ namespace Business.Abstract
 
         Country GetById(int id);
 
-        public void Add(Country country);
 
-        public void Update(Country country);
+        IResult Add(Country country);
 
-        public void Delete(Country country);
+        IResult Update(Country country);
+
+        void Delete(Country country);
     }
 }

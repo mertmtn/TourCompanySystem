@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
-using TourCompany.Web.Models.Validation;
 using TourCompany.Web.Models.ViewModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace TourCompany.Web.Controllers
 {
@@ -44,25 +42,20 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CountryCreateOrEditViewModel countryViewModel)
         {
-            var result = new CountryValidator().Validate(countryViewModel);
-            if (result.IsValid)
+            var result = _countryService.Add(new Country()
             {
-                _countryService.Add(new Country()
-                {
-                    Name = countryViewModel.Name,
-                    IsActive = countryViewModel.IsActive
-                });
-                return RedirectToAction(nameof(Index));
-            }
+                Name = countryViewModel.Name,
+                IsActive = countryViewModel.IsActive
+            });
 
-            foreach (var error in result.Errors)
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+            
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
-
             return View(countryViewModel);
         }
-
 
         public IActionResult Edit(int? id)
         {
@@ -86,40 +79,22 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, CountryCreateOrEditViewModel countryViewModel)
         {
-            if (id != countryViewModel.CountryId)
-            {
-                return NotFound();
-            }
+            if (id != countryViewModel.CountryId) return NotFound();            
 
-            var result = new CountryValidator().Validate(countryViewModel);
-            if (result.IsValid)
+            var result = _countryService.Update(new Country()
             {
-                try
-                {
-                    _countryService.Update(new Country()
-                    {
-                        Name = countryViewModel.Name,
-                        CountryId = countryViewModel.CountryId,
-                        IsActive = countryViewModel.IsActive
-                    });
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CountryExists(countryViewModel.CountryId))
-                    {
-                        return NotFound();
-                    }
-                }
-                return View(countryViewModel);
-            }
+                Name = countryViewModel.Name,
+                CountryId = countryViewModel.CountryId,
+                IsActive = countryViewModel.IsActive
+            });
 
-            foreach (var error in result.Errors)
+            if (result.StatusCode==200) return RedirectToAction(nameof(Index));
+
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
             return View(countryViewModel);
-
         }
 
 
@@ -140,11 +115,6 @@ namespace TourCompany.Web.Controllers
             Country country = _countryService.GetById(id);
             _countryService.Delete(country);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CountryExists(int id)
-        {
-            return _countryService.GetById(id) != null;
-        }
+        } 
     }
 }

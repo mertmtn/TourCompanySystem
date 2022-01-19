@@ -1,21 +1,29 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using TourCompany.Web.Models.Validation;
+using Core.Utilities.Results;
+using Core.Utilities.Results.Success;
 
 namespace Business.Concrete
 {
     public class CountryManager : ICountryService
     {
-        private ICountryDal _countryDal;
+        private readonly ICountryDal _countryDal;
 
         public CountryManager(ICountryDal countryDal)
         {
             _countryDal = countryDal;
         }
 
-        public void Add(Country country)
+        [ValidationAspect(typeof(CountryValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Add(Country country)
         {
             _countryDal.Add(country);
+            return new SuccessResult("Ülke başarıyla eklendi.", 200);
         }
 
         public void Delete(Country country)
@@ -33,9 +41,12 @@ namespace Business.Concrete
             return _countryDal.Get(p => p.CountryId == id);
         }
 
-        public void Update(Country country)
+        [ValidationAspect(typeof(CountryValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Update(Country country)
         {
             _countryDal.Update(country);
+            return new SuccessResult("Ülke başarıyla güncellendi.", 200);
         }
     }
 }
