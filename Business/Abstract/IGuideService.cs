@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {
@@ -8,9 +9,9 @@ namespace Business.Abstract
 
         Guide GetById(int id);
 
-        public void Add(Guide guide, string[] selectedLanguages);
+        IResult Add(Guide guide, string[] selectedLanguages);
 
-        public void Update(Guide guide, string[] selectedLanguages);
+        IResult Update(Guide guide, string[] selectedLanguages);
 
         public void Delete(Guide guide);
     }

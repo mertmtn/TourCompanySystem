@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {
@@ -8,10 +9,10 @@ namespace Business.Abstract
 
         Language GetById(int id);
 
-        public void Add(Language language);
+        IResult Add(Language language);
 
-        public void Update(Language language);
+        IResult Update(Language language);
 
-        public void Delete(Language language);
+        void Delete(Language language);
     }
 }

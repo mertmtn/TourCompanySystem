@@ -1,10 +1,8 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
-using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
@@ -19,12 +17,10 @@ namespace TourCompany.Web.Controllers
             _placeService = placeService;
             _guideService = guideService;
         }
-
         public IActionResult Index()
         {
             return View(_tourService.GetAll());
         }
-
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
@@ -33,8 +29,6 @@ namespace TourCompany.Web.Controllers
 
             return (tour != null) ? View(tour) : NotFound();
         }
-
-
         public IActionResult Create()
         {
             return View(new TourCreateOrEditViewModel
@@ -44,31 +38,27 @@ namespace TourCompany.Web.Controllers
             });
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(TourCreateOrEditViewModel tourViewModel)
         {
-            var result = new TourValidator().Validate(tourViewModel);
-            if (result.IsValid)
+            Tour tour = new()
             {
-                Tour tour = new()
-                {
-                    GuideId = tourViewModel.GuideId.Value,
-                    IsActive = tourViewModel.IsActive,
-                    Name = tourViewModel.Name,
-                    TourDate = tourViewModel.TourDate.Value
-                };
+                GuideId = tourViewModel.GuideId.GetValueOrDefault(),
+                IsActive = tourViewModel.IsActive,
+                Name = tourViewModel.Name,
+                TourDate = tourViewModel.TourDate.GetValueOrDefault()
+            };
 
-                _tourService.Add(tour, tourViewModel.SelectedPlaces);
-                return RedirectToAction(nameof(Index));
-            }
+            var result = _tourService.Add(tour, tourViewModel.SelectedPlaces);
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in result.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
-
+            tourViewModel.Places = _placeService.GetAll(x => x.IsActive == true);
+                tourViewModel.Guides = _guideService.GetAll();
             return View(tourViewModel);
         }
 
@@ -101,42 +91,26 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, TourCreateOrEditViewModel tourViewModel)
         {
-            if (id != tourViewModel.TourId)
+            if (id != tourViewModel.TourId) return NotFound();
+            Tour tour = new()
             {
-                return NotFound();
-            }
+                GuideId = tourViewModel.GuideId.Value,
+                IsActive = tourViewModel.IsActive,
+                Name = tourViewModel.Name,
+                TourDate = tourViewModel.TourDate.GetValueOrDefault(),
+                TourId = tourViewModel.TourId
+            };
 
-            var result = new TourValidator().Validate(tourViewModel);
-            if (result.IsValid)
+            var result = _tourService.Update(tour, tourViewModel.SelectedPlaces);
+
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+
+            foreach (var message in result.MessageList)
             {
-                try
-                {
-                    Tour tour = new()
-                    {
-                        GuideId = tourViewModel.GuideId.Value,
-                        IsActive = tourViewModel.IsActive,
-                        Name = tourViewModel.Name,
-                        TourDate = tourViewModel.TourDate.Value,
-                        TourId = tourViewModel.TourId
-                    };
-
-                    _tourService.Update(tour, tourViewModel.SelectedPlaces);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TourExists(tourViewModel.TourId))
-                    {
-                        return NotFound();
-                    }                   
-                }                
+                ModelState.AddModelError(message.Key, message.Value);
             }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            }
-
+            tourViewModel.Places = _placeService.GetAll(x => x.IsActive == true);
+            tourViewModel.Guides = _guideService.GetAll();
             return View(tourViewModel);
         }
 
@@ -155,11 +129,6 @@ namespace TourCompany.Web.Controllers
             Tour tour = _tourService.GetById(id);
             _tourService.Delete(tour);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TourExists(int id)
-        {
-            return _tourService.GetById(id) != null;
-        }
+        }                
     }
 }

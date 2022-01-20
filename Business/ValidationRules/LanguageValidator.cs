@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TourCompany.Web.Models.ViewModels;
+using Entities.Concrete;
 
 namespace TourCompany.Web.Models.Validation
 {
-    public class LanguageValidator : AbstractValidator<LanguageCreateOrEditViewModel>
+    public class LanguageValidator : AbstractValidator<Language>
     {
         public LanguageValidator()
         {

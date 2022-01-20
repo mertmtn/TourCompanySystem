@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {
@@ -8,10 +9,10 @@ namespace Business.Abstract
 
         Nationality GetById(int id);
 
-        public void Add(Nationality nationality);
+        IResult Add(Nationality nationality);
 
-        public void Update(Nationality nationality);
+        IResult Update(Nationality nationality);
 
-        public void Delete(Nationality nationality);
+        void Delete(Nationality nationality);
     }
 }

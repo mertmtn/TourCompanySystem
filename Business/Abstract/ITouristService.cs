@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {
@@ -8,12 +9,12 @@ namespace Business.Abstract
 
         Tourist GetById(int id);
 
-        public void Add(Tourist tourist);
+        IResult Add(Tourist tourist);
 
-        public void Update(Tourist tourist);
+        IResult Update(Tourist tourist);
 
-        public void UpdateForAddTours(int touristId, string[] selectedtours);
+        void UpdateForAddTours(int touristId, string[] selectedtours);
 
-        public void Delete(Tourist tourist);
+        void Delete(Tourist tourist);
     }
 }

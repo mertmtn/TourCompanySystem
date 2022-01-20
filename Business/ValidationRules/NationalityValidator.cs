@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TourCompany.Web.Models.ViewModels;
+using Entities.Concrete;
 
 namespace TourCompany.Web.Models.Validation
 {
-    public class NationalityValidator : AbstractValidator<NationalityCreateOrEditViewModel>
+    public class NationalityValidator : AbstractValidator<Nationality>
     {
         public NationalityValidator()
         {

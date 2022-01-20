@@ -1,10 +1,8 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
-using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
@@ -43,25 +41,21 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(GuideCreateOrEditViewModel guideViewModel)
         {
-            var validationResult = new GuideValidator().Validate(guideViewModel);
-            if (validationResult.IsValid)
+            Guide guide = new()
             {
-                Guide guide = new()
-                {
-                    IsActive = guideViewModel.IsActive,
-                    Name = guideViewModel.Name,
-                    Surname = guideViewModel.Surname,
-                    PhoneNumber = guideViewModel.PhoneNumber,
-                    Gender = guideViewModel.Gender
-                };
+                IsActive = guideViewModel.IsActive,
+                Name = guideViewModel.Name,
+                Surname = guideViewModel.Surname,
+                PhoneNumber = guideViewModel.PhoneNumber,
+                Gender = guideViewModel.Gender
+            };
 
-                _guideService.Add(guide, guideViewModel.SelectedLanguages);
-                return RedirectToAction(nameof(Index));
-            }
+            var result = _guideService.Add(guide, guideViewModel.SelectedLanguages);
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in validationResult.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
             guideViewModel.Languages = _languageService.GetAll();
             return View(guideViewModel);
@@ -97,37 +91,23 @@ namespace TourCompany.Web.Controllers
         {
             if (id != guideViewModel.GuideId) return NotFound();
 
-            var validationResult = new GuideValidator().Validate(guideViewModel);
-            if (validationResult.IsValid)
+            Guide guide = new()
             {
-                try
-                {
-                    Guide guide = new()
-                    {
-                        GuideId = guideViewModel.GuideId,
-                        IsActive = guideViewModel.IsActive,
-                        Name = guideViewModel.Name,
-                        Surname = guideViewModel.Surname,
-                        PhoneNumber = guideViewModel.PhoneNumber,
-                        Gender = guideViewModel.Gender
-                    };
-                    _guideService.Update(guide, guideViewModel.SelectedLanguages);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GuideExists(guideViewModel.GuideId))
-                    {
-                        return NotFound();
-                    }
-                }
-            }
+                GuideId = guideViewModel.GuideId,
+                IsActive = guideViewModel.IsActive,
+                Name = guideViewModel.Name,
+                Surname = guideViewModel.Surname,
+                PhoneNumber = guideViewModel.PhoneNumber,
+                Gender = guideViewModel.Gender
+            };
+            
+            var result = _guideService.Update(guide, guideViewModel.SelectedLanguages);
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in validationResult.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
-
             guideViewModel.Languages = _languageService.GetAll();
             return View(guideViewModel);
         }
@@ -150,11 +130,6 @@ namespace TourCompany.Web.Controllers
             Guide guide = _guideService.GetById(id);
             _guideService.Delete(guide);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool GuideExists(int id)
-        {
-            return _guideService.GetById(id) != null;
-        }
+        } 
     }
 }

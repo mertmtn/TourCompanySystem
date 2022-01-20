@@ -1,6 +1,11 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
+using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using TourCompany.Web.Models.Validation;
 
 namespace Business.Concrete
 {
@@ -13,9 +18,12 @@ namespace Business.Concrete
             _guideDal = guideDal;
         }
 
-        public void Add(Guide guide, string[] selectedLanguages)
+        [ValidationAspect(typeof(GuideValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Add(Guide guide, string[] selectedLanguages)
         {
             _guideDal.AddManyLanguages(guide, selectedLanguages);
+            return new SuccessResult(200);
         }
 
         public void Delete(Guide guide)
@@ -33,9 +41,12 @@ namespace Business.Concrete
             return _guideDal.GetById(id);
         }
 
-        public void Update(Guide guide, string[] selectedLanguages)
+        [ValidationAspect(typeof(GuideValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Update(Guide guide, string[] selectedLanguages)
         {
             _guideDal.UpdateManyLanguages(guide, selectedLanguages);
+            return new SuccessResult(200);
         }
     }
 }

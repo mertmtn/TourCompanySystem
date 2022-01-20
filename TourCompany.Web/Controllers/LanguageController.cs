@@ -1,10 +1,8 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
-using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
@@ -44,20 +42,17 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(LanguageCreateOrEditViewModel languageViewModel)
         {
-            var result = new LanguageValidator().Validate(languageViewModel);
-            if (result.IsValid)
-            {
-                _languageService.Add(new Language()
-                {
-                    Name = languageViewModel.Name,
-                    IsActive = languageViewModel.IsActive
-                });
-                return RedirectToAction(nameof(Index));
-            }
 
-            foreach (var error in result.Errors)
+            var result = _languageService.Add(new Language()
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                Name = languageViewModel.Name,
+                IsActive = languageViewModel.IsActive
+            });
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+
+            foreach (var message in result.MessageList)
+            {
+                ModelState.AddModelError(message.Key, message.Value);
             }
 
             return View(languageViewModel);
@@ -86,40 +81,22 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, LanguageCreateOrEditViewModel languageViewModel)
         {
-            if (id != languageViewModel.LanguageId)
-            {
-                return NotFound();
-            }
+            if (id != languageViewModel.LanguageId) return NotFound();
 
-            var result = new LanguageValidator().Validate(languageViewModel);
-            if (result.IsValid)
+            var result = _languageService.Update(new Language()
             {
-                try
-                {
-                    _languageService.Update(new Language()
-                    {
-                        LanguageId = languageViewModel.LanguageId,
-                        Name = languageViewModel.Name,
-                        IsActive = languageViewModel.IsActive
-                    });
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LanguageExists(languageViewModel.LanguageId))
-                    {
-                        return NotFound();
-                    }
-                }
-                return View(languageViewModel);
-            }
+                LanguageId = languageViewModel.LanguageId,
+                Name = languageViewModel.Name,
+                IsActive = languageViewModel.IsActive
+            });
 
-            foreach (var error in result.Errors)
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
             return View(languageViewModel);
-
         }
 
 
@@ -138,11 +115,6 @@ namespace TourCompany.Web.Controllers
             Language language = _languageService.GetById(id);
             _languageService.Delete(language);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool LanguageExists(int id)
-        {
-            return _languageService.GetById(id) != null;
         }
     }
 }

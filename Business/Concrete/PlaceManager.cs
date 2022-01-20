@@ -1,7 +1,12 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
+using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Linq.Expressions;
+using TourCompany.Web.Models.Validation;
 
 namespace Business.Concrete
 {
@@ -14,9 +19,13 @@ namespace Business.Concrete
             _placeDal = placeDal;
         }
 
-        public void Add(Place place)
+
+        [ValidationAspect(typeof(PlaceValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Add(Place place)
         {
             _placeDal.Add(place);
+            return new SuccessResult("Bölge başarıyla eklendi.", 200);
         }
 
         public void Delete(Place place)
@@ -34,9 +43,13 @@ namespace Business.Concrete
             return _placeDal.Get(p => p.PlaceId == id);
         }
 
-        public void Update(Place place)
+
+        [ValidationAspect(typeof(PlaceValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Update(Place place)
         {
             _placeDal.Update(place);
+            return new SuccessResult("Bölge başarıyla güncellendi.", 200);
         }
     }
 }

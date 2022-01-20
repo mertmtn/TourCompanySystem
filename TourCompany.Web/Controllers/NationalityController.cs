@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
-using TourCompany.Web.Models.Validation;
 using TourCompany.Web.Models.ViewModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace TourCompany.Web.Controllers
 {
@@ -42,20 +40,16 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(NationalityCreateOrEditViewModel nationalityViewModel)
         {
-            var result = new NationalityValidator().Validate(nationalityViewModel);
-            if (result.IsValid)
+            var result = _nationalityService.Add(new Nationality()
             {
-                _nationalityService.Add(new Nationality()
-                {
-                    Name = nationalityViewModel.Name,
-                    IsActive = nationalityViewModel.IsActive
-                });
-                return RedirectToAction(nameof(Index));
-            }
+                Name = nationalityViewModel.Name,
+                IsActive = nationalityViewModel.IsActive
+            });
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in result.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
 
             return View(nationalityViewModel);
@@ -83,40 +77,22 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, NationalityCreateOrEditViewModel nationalityViewModel)
         {
-            if (id != nationalityViewModel.NationalityId)
-            {
-                return NotFound();
-            }
+            if (id != nationalityViewModel.NationalityId) return NotFound();
 
-            var result = new NationalityValidator().Validate(nationalityViewModel);
-            if (result.IsValid)
+            var result = _nationalityService.Update(new Nationality()
             {
-                try
-                {
-                    _nationalityService.Update(new Nationality()
-                    {
-                        Name = nationalityViewModel.Name,
-                        NationalityId = nationalityViewModel.NationalityId,
-                        IsActive = nationalityViewModel.IsActive
-                    });
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NationalityExists(nationalityViewModel.NationalityId))
-                    {
-                        return NotFound();
-                    }
-                }
-                return View(nationalityViewModel);
-            }
+                Name = nationalityViewModel.Name,
+                NationalityId = nationalityViewModel.NationalityId,
+                IsActive = nationalityViewModel.IsActive
+            });
+            
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in result.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
             return View(nationalityViewModel);
-
         }
 
         public IActionResult Delete(int? id)
@@ -136,11 +112,6 @@ namespace TourCompany.Web.Controllers
             Nationality nationality = _nationalityService.GetById(id);
             _nationalityService.Delete(nationality);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool NationalityExists(int id)
-        {
-            return _nationalityService.GetById(id) != null;
         }
     }
 }

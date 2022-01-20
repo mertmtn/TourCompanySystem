@@ -1,6 +1,11 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
+using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using TourCompany.Web.Models.Validation;
 
 namespace Business.Concrete
 {
@@ -13,9 +18,12 @@ namespace Business.Concrete
             _languageDal = placeDal;
         }
 
-        public void Add(Language language)
+        [ValidationAspect(typeof(LanguageValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Add(Language language)
         {
             _languageDal.Add(language);
+            return new SuccessResult(200);
         }
 
         public void Delete(Language language)
@@ -33,9 +41,12 @@ namespace Business.Concrete
             return _languageDal.Get(p => p.LanguageId == id);
         }
 
-        public void Update(Language language)
+        [ValidationAspect(typeof(LanguageValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Update(Language language)
         {
             _languageDal.Update(language);
+            return new SuccessResult(200);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 using System.Linq.Expressions;
 
 namespace Business.Abstract
@@ -9,10 +10,10 @@ namespace Business.Abstract
 
         Place GetById(int id);
 
-        public void Add(Place place);
+        IResult Add(Place place);
+        
+        IResult Update(Place place);
 
-        public void Update(Place place);
-
-        public void Delete(Place place);
+        void Delete(Place place);
     }
 }

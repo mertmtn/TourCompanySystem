@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {
@@ -8,10 +9,10 @@ namespace Business.Abstract
 
         Tour GetById(int id);
 
-        public void Add(Tour tour, string[] selectedPlaces);
+        IResult Add(Tour tour, string[] selectedPlaces);
 
-        public void Update(Tour tour, string[] selectedPlaces);
+        IResult Update(Tour tour, string[] selectedPlaces);
 
-        public void Delete(Tour tour);
+        void Delete(Tour tour);
     }
 }

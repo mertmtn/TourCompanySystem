@@ -1,11 +1,9 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
-using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
@@ -47,27 +45,23 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(TouristCreateOrEditViewModel touristViewModel)
         {
-            var result = new TouristValidator().Validate(touristViewModel);
-            if (result.IsValid)
+            Tourist tourist = new()
             {
-                Tourist tourist = new()
-                {
-                    Name = touristViewModel.Name,
-                    BirthDate = touristViewModel.BirthDate.Value,
-                    Gender = touristViewModel.Gender,
-                    CountryId = touristViewModel.CountryId.Value,
-                    NationalityId = touristViewModel.NationalityId.Value,
-                    Surname = touristViewModel.Surname
-                };
-                _touristService.Add(tourist);
-                return RedirectToAction(nameof(Index));
-            }
+                Name = touristViewModel.Name,
+                BirthDate = touristViewModel.BirthDate.GetValueOrDefault(),
+                Gender = touristViewModel.Gender,
+                CountryId = touristViewModel.CountryId.GetValueOrDefault(),
+                NationalityId = touristViewModel.NationalityId.GetValueOrDefault(),
+                Surname = touristViewModel.Surname
+            };
 
-            foreach (var error in result.Errors)
+            var result = _touristService.Add(tourist);
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
-
 
             ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
             ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
@@ -103,49 +97,31 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, TouristCreateOrEditViewModel touristViewModel)
         {
-            if (id != touristViewModel.TouristId)
-            {
-                return NotFound();
-            }
+            if (id != touristViewModel.TouristId) return NotFound();
 
-            var result = new TouristValidator().Validate(touristViewModel);
-            if (result.IsValid)
+            Tourist tourist = new()
             {
-                try
-                {
-                    Tourist tourist = new()
-                    {
-                        TouristId = touristViewModel.TouristId,
-                        Name = touristViewModel.Name,
-                        BirthDate = touristViewModel.BirthDate.Value,
-                        Gender = touristViewModel.Gender,
-                        CountryId = touristViewModel.CountryId.Value,
-                        NationalityId = touristViewModel.NationalityId.Value,
-                        Surname = touristViewModel.Surname
-                    };
+                TouristId = touristViewModel.TouristId,
+                Name = touristViewModel.Name,
+                BirthDate = touristViewModel.BirthDate.GetValueOrDefault(),
+                Gender = touristViewModel.Gender,
+                CountryId = touristViewModel.CountryId.GetValueOrDefault(),
+                NationalityId = touristViewModel.NationalityId.GetValueOrDefault(),
+                Surname = touristViewModel.Surname
+            };
 
-                    _touristService.Update(tourist);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TouristExists(touristViewModel.TouristId))
-                    {
-                        return NotFound();
-                    } 
-                }
-            }
+            var result = _touristService.Update(tourist);
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in result.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
 
             ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
             ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
             return View(touristViewModel);
         }
-
 
         public IActionResult Delete(int? id)
         {
@@ -156,7 +132,6 @@ namespace TourCompany.Web.Controllers
             return (tourist != null) ? View(tourist) : NotFound();
         }
 
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -164,11 +139,6 @@ namespace TourCompany.Web.Controllers
             Tourist tourist = _touristService.GetById(id);
             _touristService.Delete(tourist);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TouristExists(int id)
-        {
-            return _touristService.GetById(id) != null;
         }
     }
 }

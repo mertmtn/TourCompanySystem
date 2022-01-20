@@ -1,10 +1,8 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
-using TourCompany.Web.Models.Validation;
 
 namespace TourCompany.Web.Controllers
 {
@@ -43,23 +41,19 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(PlaceCreateOrEditViewModel placeViewModel)
         {
-            var result = new PlaceValidator().Validate(placeViewModel);
-            if (result.IsValid)
+            Place guide = new()
             {
-                Place guide = new()
-                {
-                    IsActive = placeViewModel.IsActive,
-                    Name = placeViewModel.Name,
-                    Price = placeViewModel.Price.Value
-                };
+                IsActive = placeViewModel.IsActive,
+                Name = placeViewModel.Name,
+                Price = placeViewModel.Price.GetValueOrDefault()
+            };
 
-                _placeService.Add(guide);
-                return RedirectToAction(nameof(Index));
-            }
+            var result = _placeService.Add(guide);
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var error in result.Errors)
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
 
             return View(placeViewModel);
@@ -89,41 +83,25 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, PlaceCreateOrEditViewModel placeViewModel)
         {
-            if (id != placeViewModel.PlaceId)
-            {
-                return NotFound();
-            }
+            if (id != placeViewModel.PlaceId) return NotFound();
 
-            var result = new PlaceValidator().Validate(placeViewModel);
-            if (result.IsValid)
+            Place place = new()
             {
-                try
-                {
-                    Place place = new()
-                    {
-                        PlaceId = placeViewModel.PlaceId,
-                        IsActive = placeViewModel.IsActive,
-                        Name = placeViewModel.Name,
-                        Price = placeViewModel.Price.Value
-                    };
-                    _placeService.Update(place);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlaceExists(placeViewModel.PlaceId))
-                    {
-                        return NotFound();
-                    }
-                }
-            }
+                PlaceId = placeViewModel.PlaceId,
+                IsActive = placeViewModel.IsActive,
+                Name = placeViewModel.Name,
+                Price = placeViewModel.Price.GetValueOrDefault()
+            };
 
-            foreach (var error in result.Errors)
+            var result = _placeService.Update(place);
+
+            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+
+            foreach (var message in result.MessageList)
             {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                ModelState.AddModelError(message.Key, message.Value);
             }
             return View(placeViewModel);
-
         }
 
         public IActionResult Delete(int? id)
@@ -144,9 +122,5 @@ namespace TourCompany.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PlaceExists(int id)
-        {
-            return _placeService.GetById(id) != null;
-        }
     }
 }

@@ -1,9 +1,9 @@
-﻿using FluentValidation;
-using TourCompany.Web.Models.ViewModels;
+﻿using Entities.Concrete;
+using FluentValidation;
 
 namespace TourCompany.Web.Models.Validation
 {
-    public class GuideValidator : AbstractValidator<GuideCreateOrEditViewModel>
+    public class GuideValidator : AbstractValidator<Guide>
     {
         public GuideValidator()
         {

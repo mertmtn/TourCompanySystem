@@ -1,6 +1,11 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
+using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using TourCompany.Web.Models.Validation;
 
 namespace Business.Concrete
 {
@@ -13,9 +18,12 @@ namespace Business.Concrete
             _nationalityDal = nationalityDal;
         }
 
-        public void Add(Nationality nationality)
+        [ValidationAspect(typeof(NationalityValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Add(Nationality nationality)
         {
             _nationalityDal.Add(nationality);
+            return new SuccessResult(200);
         }
 
         public void Delete(Nationality nationality)
@@ -33,9 +41,12 @@ namespace Business.Concrete
             return _nationalityDal.Get(x=>x.NationalityId==id);
         }
 
-        public void Update(Nationality nationality)
+        [ValidationAspect(typeof(NationalityValidator), Priority = 1)]
+        [ExceptionAspect(typeof(Result))]
+        public IResult Update(Nationality nationality)
         {
             _nationalityDal.Update(nationality);
+            return new SuccessResult(200);
         }
     }
 }
