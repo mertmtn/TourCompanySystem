@@ -11,7 +11,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (var context = new TourCompanyDbContext())
             {
-                return context.Invoices.Include(i => i.Tourist).ToList();
+                return context.Invoices.Include(i => i.Tourist).AsNoTracking().ToList();
             }
         }
 
@@ -19,8 +19,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (var context = new TourCompanyDbContext())
             {
-                return context.Invoices.Include(i => i.InvoiceDetails).ThenInclude(i => i.Tour).ThenInclude(p => p.Places).Include(x => x.Tourist)
-                .FirstOrDefault(m => m.InvoiceNo == invoiceNo);
+                return context.Invoices.AsNoTracking().Include(i => i.InvoiceDetails).ThenInclude(i => i.Tour).ThenInclude(p => p.Places).Include(x => x.Tourist).FirstOrDefault(m => m.InvoiceNo == invoiceNo);
             }
         }
     }

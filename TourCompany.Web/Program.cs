@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
+                    //AutofacBusinessModule instance passed as a parameter to RegisterModule method. 
                     builder.RegisterModule(new AutofacBusinessModule());
                 });
 

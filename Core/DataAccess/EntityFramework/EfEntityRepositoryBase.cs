@@ -42,8 +42,8 @@ namespace Core.DataAccess.EntityFramework
             using (var dbContext = new TContext())
             {
                 return filter == null ?
-                    dbContext.Set<TEntity>().ToList() :
-                    dbContext.Set<TEntity>().Where(filter).ToList();
+                    dbContext.Set<TEntity>().AsNoTracking().ToList() :
+                    dbContext.Set<TEntity>().AsNoTracking().Where(filter).ToList();
             }
         }
 

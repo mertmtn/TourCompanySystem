@@ -33,7 +33,7 @@
             Toplam Ücret
         </dt>
         <dd class="col-sm-10">
-            @Model.InvoiceDetails.Sum(x=>(decimal)(1-x.Discount)*(x.Price)) 
+            @Model.InvoiceDetails.Sum(x=>(decimal)(1-x.Discount)*(x.Price)).ToString("#.##") (₺) 
         </dd>
     </dl>
 
@@ -57,13 +57,14 @@
             {
                 <tr>
                     <td>
-                        @item.Tour.Name
+                        <a  asp-controller="Tours" asp-action="Details" asp-route-id="@item.Tour.TourId">@item.Tour.Name  </a>     
+                    </td>
+
+                    <td>
+                        % @(item.Discount*100)
                     </td>
                     <td>
-                        @item.Discount
-                    </td>
-                    <td>
-                        @item.Price
+                        @item.Price (₺)
                     </td>
 
                 </tr>

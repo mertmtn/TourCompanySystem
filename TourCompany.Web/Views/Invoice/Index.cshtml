@@ -13,10 +13,13 @@
         <tr>
             <th>
                 Fatura No
-            </th>
+            </th>            <th>
+                Fatura Kesilen Turist
+            </th> 
             <th>
                 Fatura Kesim Tarihi
             </th> 
+           
             <th></th>
         </tr>
     </thead>
@@ -26,10 +29,13 @@
             <tr>
                 <td>
                     @item.InvoiceNo
-                </td>
+                </td>                                <td>
+                    @item.Tourist.Name @item.Tourist.Surname 
+                </td> 
                 <td>
                     @item.InvoiceDate
-                </td>      
+                </td>  
+                
                 <td>                 
                     <a role="button" class="btn btn-info"  asp-action="Details" asp-route-id="@item.InvoiceNo">Fatura Detay</a>                   
                 </td>

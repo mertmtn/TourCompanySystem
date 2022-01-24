@@ -16,7 +16,8 @@ namespace TourCompany.Web.Controllers
 
         public IActionResult Index()
         {
-            return View(_invoiceService.GetAllInvoice());
+            var invoiceList = _invoiceService.GetAllInvoice();
+            return View(invoiceList);
         }
 
 
