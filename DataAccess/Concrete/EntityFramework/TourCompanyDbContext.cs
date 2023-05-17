@@ -1,11 +1,12 @@
-﻿using DataAccess.Concrete.EntityFramework.Mappings;
-using Entities.Concrete;
+﻿using Core.Entities.Concrete;
+using DataAccess.Concrete.EntityFramework.Mappings;
+using Entities.Concrete; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class TourCompanyDbContext : DbContext
+    public class TourCompanyDbContext :  DbContext 
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,6 +30,7 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new TourMapping());  
             modelBuilder.ApplyConfiguration(new InvoiceMapping());
             modelBuilder.ApplyConfiguration(new InvoiceDetailMapping());
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Guide> Guides { get; set; }
@@ -49,5 +51,8 @@ namespace DataAccess.Concrete.EntityFramework
 
         public DbSet<Nationality> Nationalities { get; set; }
 
+        public DbSet<OperationClaim> OperationClaim { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
     }
 }

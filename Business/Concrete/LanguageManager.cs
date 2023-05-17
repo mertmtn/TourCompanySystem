@@ -11,7 +11,7 @@ namespace Business.Concrete
 {
     public class LanguageManager : ILanguageService
     {
-        private ILanguageDal _languageDal;
+        public ILanguageDal _languageDal;
 
         public LanguageManager(ILanguageDal placeDal)
         {

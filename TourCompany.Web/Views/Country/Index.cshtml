@@ -27,8 +27,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <button role="button" class="btn-warning" onclick="location.href='@Url.Action("Edit", "Country",new { Id = item.CountryId } )'">Düzenle</button>
-                    <button class="btn-info" onclick="openDetailModal(@item.CountryId)">Detay</button>
+                    <button role="button" class="btn-warning" onclick="openEditModal(@item.CountryId)">Düzenle</button>                    
                     <button class="btn-danger" onclick="openDeleteModal(@item.CountryId)">Sil</button>
                 </td>
             </tr>

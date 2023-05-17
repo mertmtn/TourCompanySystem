@@ -9,65 +9,66 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public void AddManyLanguages(Guide guide, string[] selectedLanguages)
         {
-            using (var context = new TourCompanyDbContext())
+            using var context = new TourCompanyDbContext();
+            if (selectedLanguages != null)
             {
-                if (selectedLanguages != null)
+                foreach (var language in selectedLanguages.ToList())
                 {
-                    selectedLanguages.ToList()
-                        .ForEach(lang => guide.Languages.Add(context.Languages.Find(Convert.ToInt32(lang))));
+                    var foundLanguage = context.Languages.Find(Convert.ToInt32(language));
+                    if (foundLanguage != null)
+                    {
+                        guide.Languages.Add(foundLanguage);
+                    }
                 }
-                context.Add(guide);
-
-                context.SaveChanges();
             }
+            context.Add(guide);
+            context.SaveChanges();
         }
+
         public void UpdateManyLanguages(Guide guide, string[] selectedLanguages)
         {
-            using (var context = new TourCompanyDbContext())
+            using var context = new TourCompanyDbContext();
+            var item = context.Entry(guide);
+            //change item state to modified
+            item.State = EntityState.Modified;
+
+            if (selectedLanguages != null)
             {
-                if (selectedLanguages != null)
+                //load existing items for ManyToMany collection
+                item.Collection(i => i.Languages).Load();
+
+                //clear Languages items          
+                guide.Languages.Clear();
+
+                foreach (var language in selectedLanguages.ToList())
                 {
-                    var item = context.Entry(guide);
-                    //change item state to modified
-                    item.State = EntityState.Modified;
-
-                    //load existing items for ManyToMany collection
-                    item.Collection(i => i.Languages).Load();
-
-                    //clear Languages items          
-                    guide.Languages.Clear();
-
-                    selectedLanguages.ToList()
-                        .ForEach(lang => guide.Languages.Add(context.Languages.Find(Convert.ToInt32(lang))));
+                    var foundLanguage = context.Languages.Find(Convert.ToInt32(language));
+                    if (foundLanguage != null)
+                    {
+                        guide.Languages.Add(foundLanguage);
+                    }
                 }
-                
-                context.SaveChanges();
             }
+            context.SaveChanges();
         }
+
         public Guide GetById(int id)
         {
-            using (var context = new TourCompanyDbContext())
-            {
-                // get specific cart including all items
-                return context.Guides.Include(g=>g.Languages).ThenInclude(row => row.Guides).First(cart => cart.GuideId == id);
-                //// get all items belonging to cart
-                //var cartItems = guideIncludingLanguages.Languages.Select(row => row.Guides);
-
-            }
+            using var context = new TourCompanyDbContext();
+            // get specific Guide including all items
+            return context.Guides.Include(g => g.Languages).ThenInclude(row => row.Guides).First(cart => cart.GuideId == id);
         }
 
         public void DeleteManyLanguages(Guide guide)
         {
-            using (var context = new TourCompanyDbContext())
-            {
-                var guideToRemove = context.Guides.First(row => row.GuideId == guide.GuideId);
-                
-                context.RemoveRange(guideToRemove.Languages);
-                context.SaveChanges();
+            using var context = new TourCompanyDbContext();
+            var guideToRemove = context.Guides.First(row => row.GuideId == guide.GuideId);
 
-                context.Remove(guideToRemove);
-                context.SaveChanges();
-            }
+            context.RemoveRange(guideToRemove.Languages);
+            context.SaveChanges();
+
+            context.Remove(guideToRemove);
+            context.SaveChanges();
         }
     }
 }

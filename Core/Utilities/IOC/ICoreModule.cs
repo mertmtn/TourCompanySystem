@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection; 
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Utilities.IOC
+namespace Core.Utilities.IoC
 {
     public interface ICoreModule
     {
-        void Load(IServiceCollection collection);
+        void Load(IServiceCollection serviceCollection);
     }
 }

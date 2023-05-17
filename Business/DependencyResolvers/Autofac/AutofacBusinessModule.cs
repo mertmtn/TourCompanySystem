@@ -6,6 +6,11 @@ using Business.Concrete;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using Core.DataAccess.EntityFramework;
+using Core.DataAccess;
+using Microsoft.AspNetCore.Http;
+using Core.Utilities.Security.JsonWebToken;
+using Data.Abstract;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -45,6 +50,14 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<CountryManager>().As<ICountryService>().InstancePerDependency();
             builder.RegisterType<EfCountryDal>().As<ICountryDal>().SingleInstance();
+
+            builder.RegisterType<UserManager>().As<IUserService>();
+            builder.RegisterType<EfUserDal>().As<IUserDal>();
+
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
+            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
                 .EnableInterfaceInterceptors(new ProxyGenerationOptions()

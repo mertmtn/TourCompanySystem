@@ -3,15 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace TourCompany.Web.Controllers
 {
     public class CountryController : Controller
     {
         private readonly ICountryService _countryService;
+        private readonly INotyfService _notyf;
 
-        public CountryController(ICountryService countryService)
+        public CountryController(ICountryService countryService, INotyfService notyf)
         {
+            _notyf = notyf;
             _countryService = countryService;
         }
 
@@ -25,9 +28,7 @@ namespace TourCompany.Web.Controllers
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
-
             Country country = _countryService.GetById(id.Value);
-
             return (country != null) ? PartialView("~/Views/Country/Partials/Detail.cshtml", country) : NotFound();
         }
 
@@ -48,12 +49,18 @@ namespace TourCompany.Web.Controllers
                 IsActive = countryViewModel.IsActive
             });
 
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-            
+            if (result.StatusCode == 200)
+            {
+                _notyf.Success("Kayıt işlemi başarılıdır.");
+                return RedirectToAction(nameof(Index));
+            }
+
             foreach (var message in result.MessageList)
             {
                 ModelState.AddModelError(message.Key, message.Value);
             }
+
+
             return View(countryViewModel);
         }
 
@@ -63,24 +70,18 @@ namespace TourCompany.Web.Controllers
 
             Country country = _countryService.GetById(id.Value);
 
-            if (country != null)
+            return (country != null) ? PartialView("~/Views/Country/Partials/Edit.cshtml", new CountryCreateOrEditViewModel()
             {
-                return View(new CountryCreateOrEditViewModel()
-                {
-                    Name = country.Name,
-                    CountryId = country.CountryId,
-                    IsActive = country.IsActive
-                });
-            }
-            return NotFound();
+                Name = country.Name,
+                CountryId = country.CountryId,
+                IsActive = country.IsActive
+            }) : NotFound();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int? id, CountryCreateOrEditViewModel countryViewModel)
+        //[ValidateAntiForgeryToken]
+        public JsonResult Edit(CountryCreateOrEditViewModel countryViewModel)
         {
-            if (id != countryViewModel.CountryId) return NotFound();            
-
             var result = _countryService.Update(new Country()
             {
                 Name = countryViewModel.Name,
@@ -88,22 +89,14 @@ namespace TourCompany.Web.Controllers
                 IsActive = countryViewModel.IsActive
             });
 
-            if (result.StatusCode==200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
-            {
-                ModelState.AddModelError(message.Key, message.Value);
-            }
-            return View(countryViewModel);
+            return Json(result);
         }
 
 
         public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();
-
             Country country = _countryService.GetById(id.Value);
-
             return (country != null) ? PartialView("~/Views/Country/Partials/Delete.cshtml", country) : NotFound();
         }
 
@@ -114,7 +107,8 @@ namespace TourCompany.Web.Controllers
         {
             Country country = _countryService.GetById(id);
             _countryService.Delete(country);
+            _notyf.Success("Silme işlemi başarılıdır.");
             return RedirectToAction(nameof(Index));
-        } 
+        }
     }
 }

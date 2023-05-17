@@ -1,6 +1,9 @@
-﻿using Core.DataAccess.Core.DataAccess;
+﻿ 
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Core.DataAccess.EntityFramework
