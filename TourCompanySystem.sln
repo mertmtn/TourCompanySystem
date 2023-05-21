@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{BB45B4A2-8F29-4258-A693-1D4390A0E5DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TourCompany.Web", "TourCompany.Web\TourCompany.Web.csproj", "{E11B9E71-E1E7-486D-98F0-AAE409A32D67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TourCompany.Web", "TourCompany.Web\TourCompany.Web.csproj", "{E11B9E71-E1E7-486D-98F0-AAE409A32D67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

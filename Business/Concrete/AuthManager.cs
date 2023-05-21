@@ -21,24 +21,7 @@ namespace Business.Concrete
             _tokenHelper = tokenHelper;
         }
 
-        public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
-        {
-            byte[] passwordHash, passwordSalt;
-            HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            var user = new User
-            {
-                EMail = userForRegisterDto.Email,
-                FirstName = userForRegisterDto.FirstName,
-                UserName = userForRegisterDto.UserName,
-                LastName = userForRegisterDto.LastName,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
-                IsActive = true,
-                CreatedDate = DateTime.Now
-            };
-            _userService.Add(user);
-            return new SuccessDataResult<User>(user, UserMessage.UserRegistered);
-        }
+       
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
@@ -56,14 +39,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck, UserMessage.SuccessfulLogin);
         }
 
-        public IResult UserExists(string email)
-        {
-            if (_userService.GetByMail(email).Data != null)
-            {
-                return new ErrorResult(UserMessage.UserAlreadyExists);
-            }
-            return new SuccessResult();
-        }
+
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {

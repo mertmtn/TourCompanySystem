@@ -1,7 +1,7 @@
 ﻿@model TourCompany.Web.Models.ViewModels.TourCreateOrEditViewModel
- 
+
 <div class="container">
- 
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -30,7 +30,7 @@
                             </div>
 
                         </div>
-                                                <div class="row mb-3">
+                        <div class="row mb-3">
 
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Tur Rehberi</h6>
@@ -41,7 +41,7 @@
                                     {
                                         foreach (var guide in Model.Guides)
                                         {
-                                                    <option value="@guide.GuideId">@guide.Name @guide.Surname</option>
+                                            <option value="@guide.GuideId">@guide.Name @guide.Surname</option>
                                         }
                                     }
                                 </select>
@@ -51,7 +51,8 @@
                         <div class="row mb-3">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Aktif Mi?</h6>
-                            </div><div class="col-sm-9 text-secondary">
+                            </div>
+                            <div class="col-sm-9 text-secondary">
                                 <div class="form-group form-check">
                                     <label class="form-check-label">
                                         <input class="form-check-input" asp-for="IsActive" />
@@ -68,7 +69,7 @@
                                     {
                                         foreach (var place in Model.Places)
                                         {
-                                                    <option value="@place.PlaceId"  selected=@(Model.SelectedPlaces.Contains(place.PlaceId.ToString()))>@place.Name</option>
+                                            <option value="@place.PlaceId" selected=@(Model.SelectedPlaces.Contains(place.PlaceId.ToString()))>@place.Name</option>
                                         }
                                     }
                                 </select>
@@ -94,11 +95,11 @@
 
         </div>
     </div>
-</div> 
+</div>
 
 
- <script>
-     $(document).ready(function() {
-      $('.my-select').selectpicker();
+<script>
+    $(document).ready(function () {
+        $('.my-select').selectpicker();
     });
 </script>

@@ -8,12 +8,10 @@ namespace TourCompany.Web.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private IAuthService _authService;
-        private IHttpContextAccessor _httpContext;
-        public AccountController(IAuthService authService, IHttpContextAccessor httpContext)
+        private IAuthService _authService; 
+        public AccountController(IAuthService authService)
         {
-            _authService = authService;
-            _httpContext = httpContext;
+            _authService = authService; 
         }
         public ActionResult Login()
         {
@@ -38,30 +36,7 @@ namespace TourCompany.Web.Controllers
             }
             return View(userForLoginDto);
         }
-
-        public ActionResult Register()
-        {
-            return View(new UserForRegisterDto());
-        }
-
-        [HttpPost]
-        public ActionResult Register(UserForRegisterDto userForRegisterDto)
-        {
-            var userExists = _authService.UserExists(userForRegisterDto.Email);
-            if (!userExists.Success)
-            {
-                return BadRequest(userExists.Message);
-            }
-
-            var registerResult = _authService.Register(userForRegisterDto, userForRegisterDto.Password);
-            var result = _authService.CreateAccessToken(registerResult.Data);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-
-            return BadRequest(result.Message);
-        }
+         
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Logout()

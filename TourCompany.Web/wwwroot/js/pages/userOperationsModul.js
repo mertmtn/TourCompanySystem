@@ -1,23 +1,27 @@
-ï»¿function submitForEdit() {
+function submitForEdit() {
 
-    var countryViewModel = {
-        Name: $("#Name").val(),
-        CountryId: $("#CountryId").val(),
-        IsActive: $("#IsActive").val()
-    }; 
+    var userForRegisterDto = {
+        FirstName: $("#FirstName").val(),
+        LastName: $("#LastName").val(),
+        MaidenName: $("#MaidenName").val(),
+        Email: $("#Email").val(),
+        Id: $("#Id").val(),
+        IsActive: $("#IsActive").val(),
+        Password: $("#Password").val()        
+    };
 
     $.ajax({
         type: "POST",
-        url: "/Country/Edit/",
-        data: countryViewModel,
-       
-      
+        url: "/User/Edit/",
+        data: userForRegisterDto,
+
+
         encode: true,
     }).done(function (data) {
         $("#staticBackdrop").modal('hide');
         Toastify({
             text: data.message,
-            duration: 1500,            
+            duration: 1500,
             close: true,
             gravity: "top", // `top` or `bottom`
             position: "left", // `left`, `center` or `right`
@@ -25,7 +29,7 @@
             style: {
                 background: "linear-gradient(to right, #00b09b, #96c93d)",
             },
-            callback: function () { window.location.href ="/Country" } // Callback after click
+            callback: function () { window.location.href = "/User" } // Callback after click
         }).showToast();
 
     });
@@ -35,15 +39,19 @@
 
 function submitForCreate() {
 
-    var countryViewModel = {
-        Name: $("#Name").val(), 
+    var userForRegisterDto = {
+        FirstName: $("#FirstName").val(),
+        LastName: $("#LastName").val(),
+        MaidenName: $("#MaidenName").val(),
+        Email: $("#Email").val(),
+        Id: $("#Id").val(),
         IsActive: $("#IsActive").val()
-    }; 
+    };
 
     $.ajax({
         type: "POST",
-        url: "/Country/Create/",
-        data: countryViewModel,
+        url: "/User/Register/",
+        data: userForRegisterDto,
         encode: true,
     }).done(function (data) {
         if (data.success) {
@@ -58,17 +66,13 @@ function submitForCreate() {
                 style: {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
                 },
-                callback: function () { window.location.href = "/Country" } // Callback after click
+                callback: function () { window.location.href = "/User" } // Callback after click
             }).showToast();
         }
         else {
             $(".modal-body").html(data);
-            $(".modal-title").html("Yeni Ãœlke TanÄ±mÄ±");
+            $(".modal-title").html("Yeni Ülke Tanýmý");
             $("#staticBackdrop").modal('show');
         }
     });
 }
-
-
-
-

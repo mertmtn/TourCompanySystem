@@ -26,8 +26,7 @@ namespace TourCompany.Web.Controllers
 
         [HttpGet]
         public IActionResult Detail(int? id)
-        {
-            if (id == null) return NotFound();
+        { 
             var country = _countryService.GetById(id.Value);
             return (country != null) ? PartialView("~/Views/Country/Partials/Detail.cshtml", country) : NotFound();
         }

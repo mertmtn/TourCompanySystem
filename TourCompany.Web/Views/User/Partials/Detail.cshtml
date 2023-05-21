@@ -1,0 +1,38 @@
+﻿@model Entities.DTO.UserForRegisterDto
+
+<div class="container">
+    <div class="main-body">
+        <div class="card">
+            <div class="card-body"> 
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0">Adı</h6>
+                        <span class="text-secondary"> @Html.DisplayFor(model => model.FirstName)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0">Soyadı</h6>
+                        <span class="text-secondary"> @Html.DisplayFor(model => model.LastName)</span>
+                    </li>
+                    @if (!string.IsNullOrEmpty(Model.MaidenName))
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0">Kızlık Soyadı</h6>
+                            <span class="text-secondary"> @Html.DisplayFor(model => model.MaidenName)</span>
+                        </li>
+                    }
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0">E-Posta</h6>
+                        <span class="text-secondary"> @Html.DisplayFor(model => model.Email)</span>
+                    </li>                    
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                        <h6 class="mb-0">Aktif Mi?</h6>
+                        <span class="text-secondary">
+                            @(Model.IsActive ? "Evet" : "Hayır")
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
