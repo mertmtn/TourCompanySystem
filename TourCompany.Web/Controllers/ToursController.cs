@@ -26,7 +26,7 @@ namespace TourCompany.Web.Controllers
             return View(_tourService.GetAll());
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Detail(int? id)
         {
             var tour = _tourService.GetById(id.Value);
             return (tour != null) ? PartialView("~/Views/Tours/Partials/Detail.cshtml", tour) : NotFound();

@@ -8,7 +8,7 @@
 <h1>Uyruk Listesi</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Uyruk Tanım</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/Nationality/Create/','Yeni Uyruk Tanımı')">Yeni Uyruk Tanım</button>
 </p>
 
 <table class="table">
@@ -28,30 +28,17 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td> 
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openEditModal(@item.NationalityId)">Düzenle</button>                     
-                    <button type="button" class="btn btn-danger" onclick="openDeleteModal(@item.NationalityId)">Sil</button>
+                    <button type="button" class="btn btn-warning" onclick="openModal('/Nationality/Edit/@item.NationalityId,'Uyruk Güncelle')">Düzenle</button>
+                    <button type="button" class="btn btn-danger" onclick="openModal('/Nationality/Delete/@item.NationalityId,'Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
-
+@Html.PartialAsync("_CommonModalPartial")
 
 @section Scripts{
+    <script src="~/js/pages/commonModul.js" asp-append-version="true"></script>
     <script src="~/js/pages/nationalityModul.js" asp-append-version="true"></script>
 }

@@ -1,0 +1,41 @@
+﻿@model Entities.Concrete.Tourist
+
+<div class="container">
+    <div class="main-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="mt-3"> 
+                                <h4>Turist Detayı</h4>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Adı Soyadı</h6>
+                                <span class="text-secondary"> @Model.BirthDate @Model.Surname</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Doğum Tarihi</h6>
+                                <span class="text-secondary"> @Model.BirthDate.ToString("dd/MM/yyyy")</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Ülke / Uyruk</h6>
+                                <span class="text-secondary"> @Model.Country.Name @Model.Nationality.Name</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Cinsiyet</h6>
+                                <span class="text-secondary">@(Model.Gender == 'E' ? "Erkek" : "Kadın")</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+ 

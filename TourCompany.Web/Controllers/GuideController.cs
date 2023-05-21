@@ -25,7 +25,7 @@ namespace TourCompany.Web.Controllers
             return View(_guideService.GetAll());
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Detail(int? id)
         {
             var guide = _guideService.GetById(id.Value);
             return (guide != null) ? PartialView("~/Views/Guide/Partials/Detail.cshtml", guide) : NotFound();

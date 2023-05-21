@@ -1,42 +1,4 @@
-function openCreateModal() {
-    $.get("/Tours/Create/", function (data) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Yeni Tur Tanýmý");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openDetailModal(id) {
-    $.get("/Tours/Details/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Tur Detayý");
-        $("#staticBackdrop").modal('show');
-    });
-}
-function openDeleteModal(id) {
-    $.get("/Tours/Delete/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Kaydý silmek istediðinizden emin misiniz?");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openEditModal(id) {
-    $.get("/Tours/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Tur Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function btnEdit(id) {
-    $.get("/Tours/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Tur Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
+ 
 function submitForEdit() {
     var tourViewModel = {
         Name: $("#Name").val(),

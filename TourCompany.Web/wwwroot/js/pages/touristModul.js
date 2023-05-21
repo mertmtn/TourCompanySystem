@@ -1,42 +1,4 @@
-﻿function openCreateModal() {
-    $.get("/Tourist/Create/", function (data) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Yeni Tur Tanımı");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openDetailModal(id) {
-    $.get("/Tourist/Details/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Tur Detayı");
-        $("#staticBackdrop").modal('show');
-    });
-}
-function openDeleteModal(id) {
-    $.get("/Tourist/Delete/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Kaydı silmek istediğinizden emin misiniz?");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openEditModal(id) {
-    $.get("/Tourist/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Tur Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function btnEdit(id) {
-    $.get("/Tourist/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Tur Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
+﻿
 function submitForEdit() {
     var touristViewModel = {
         Name: $("#Name").val(),

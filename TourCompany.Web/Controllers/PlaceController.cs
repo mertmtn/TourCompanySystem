@@ -24,7 +24,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public IActionResult Detail(int? id)
         {
             var place = _placeService.GetById(id.Value);
             return (place != null) ? PartialView("~/Views/Place/Partials/Detail.cshtml", place) : NotFound();

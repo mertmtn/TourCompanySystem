@@ -1,45 +1,50 @@
 ﻿@model TourCompany.Web.Models.ViewModels.TouristCreateOrEditViewModel
- 
-<div class="row">
-    <div class="col-md-4">
-        <form>
-            <input type="hidden" asp-for="TouristId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <input type="hidden" asp-for="TouristId" />
+                    <div class="form-group">
+                        <label class="control-label">Adı</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Soyadı</label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Cinsiyeti</label>
+                        <select asp-for="Gender" class="selectpicker">
+                            <option value="K">Kadın</option>
+                            <option value="E">Erkek</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Doğum Tarihi</label>
+                        <input asp-for="BirthDate" class="form-control" />
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Ülke</label>
+                        <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
+                        <span asp-validation-for="CountryId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Uyruk</label>
+                        <select asp-for="NationalityId" class="form-control" asp-items="ViewBag.NationalityId"></select>
+                        <span asp-validation-for="NationalityId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="Güncelle" onclick="submitForEdit()" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Surname" class="control-label"></label>
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                                <select asp-for="Gender" class="selectpicker">
-                                    <option value="K">Kadın</option>
-                                    <option value="E">Erkek</option>
-                                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
-                <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NationalityId" class="control-label"></label>
-                <select asp-for="NationalityId" class="form-control" asp-items="ViewBag.NationalityId"></select>
-                <span asp-validation-for="NationalityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="button" value="Güncelle" onclick="submitForEdit()" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div> 
- 
+</div>

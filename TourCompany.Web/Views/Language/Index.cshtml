@@ -8,7 +8,7 @@
 <h1>Yabancı Dil Listesi</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Dil Ekle</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/Language/Create','Yeni Dil Tanımı')">Yeni Dil Ekle</button>
 </p>
 
 <table class="table">
@@ -26,34 +26,19 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>
+                </td>                
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    <button role="button" class="btn-warning" onclick="openEditModal(@item.LanguageId)">Düzenle</button>
-                    <button class="btn-danger" onclick="openDeleteModal(@item.LanguageId)">Sil</button>
+                    <button role="button" class="btn-warning" onclick="openModal('/Language/Edit/@item.LanguageId,'Dil Güncelle')">Düzenle</button>
+                    <button class="btn-danger" onclick="openModal('/Language/Delete/@item.LanguageId,'Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
+@Html.PartialAsync("_CommonModalPartial")
 
 @section Scripts{
+    <script src="~/js/pages/commonModul.js" asp-append-version="true"></script>
     <script src="~/js/pages/languageModul.js" asp-append-version="true"></script>
 }

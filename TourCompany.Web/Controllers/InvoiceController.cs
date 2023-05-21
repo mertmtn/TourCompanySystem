@@ -21,7 +21,7 @@ namespace TourCompany.Web.Controllers
         }
 
 
-        public IActionResult Details(string id)
+        public IActionResult Detail(string id)
         {
             if (id == null) return NotFound();            
 

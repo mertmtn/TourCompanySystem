@@ -1,41 +1,4 @@
-﻿function openCreateModal() {
-    $.get("/Place/Create/", function (data) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Yeni Bölge Tanımı");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openDetailModal(id) {
-    $.get("/Place/Details/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Bölge Detayı");
-        $("#staticBackdrop").modal('show');
-    });
-}
-function openDeleteModal(id) {
-    $.get("/Place/Delete/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Kaydı silmek istediğinizden emin misiniz?");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openEditModal(id) {
-    $.get("/Place/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Bölge Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function btnPlaceEdit(id) {
-    $.get("/Place/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Bölge Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
+﻿ 
 
 function submitForEdit() {
     var placeViewModel = {

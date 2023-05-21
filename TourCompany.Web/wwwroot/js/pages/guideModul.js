@@ -1,4 +1,4 @@
-﻿function openCreateModal() {
+﻿function openModal() {
     $.get("/Place/Create/", function (data) {
         $(".modal-body").html(data);
         $(".modal-title").html("Yeni Bölge Tanımı");
@@ -6,14 +6,14 @@
     });
 }
 
-function openDetailModal(id) {
-    $.get("/Place/Details/" + id, function (data, status) {
+function openModal(id) {
+    $.get("/Place/Detail/" + id, function (data, status) {
         $(".modal-body").html(data);
         $(".modal-title").html("Bölge Detayı");
         $("#staticBackdrop").modal('show');
     });
 }
-function openDeleteModal(id) {
+function openModal(id) {
     $.get("/Place/Delete/" + id, function (data, status) {
         $(".modal-body").html(data);
         $(".modal-title").html("Kaydı silmek istediğinizden emin misiniz?");
@@ -21,7 +21,7 @@ function openDeleteModal(id) {
     });
 }
 
-function openEditModal(id) {
+function openModal(id) {
     $.get("/Place/Edit/" + id, function (data, status) {
         $(".modal-body").html(data);
         $(".modal-title").html("Bölge Güncelle");

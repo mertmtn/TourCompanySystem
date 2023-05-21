@@ -8,20 +8,17 @@
 <h1>Turist Listesi</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Turist Tanımı</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/Tourist/Create','Yeni Turist Tanımı')">Yeni Turist Tanımı</button>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Ad
-            </th>
-            <th>
-                Soyad
-            </th>
+                Ad Soyad
+            </th>            
             <th>
                 Ülke
-            </th>
+            </th> 
             <th>
                 İşlemler
             </th> 
@@ -32,42 +29,25 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Surname)
-                </td>
+                    @Html.DisplayFor(modelItem => item.Name)   @Html.DisplayFor(modelItem => item.Surname)
+                </td> 
                 <td>
                     @Html.DisplayFor(modelItem => item.Country.Name)
-                </td> 
-
+                </td>
                 <td>
                     <a role="button" class="btn btn-success"  asp-action="Index" asp-controller="TourSelling" asp-route-id="@item.TouristId">Tur Satışı Yap</a>
-                    <button type="button" class="btn btn-warning" onclick="openEditModal(@item.TouristId)">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openDetailModal(@item.TouristId)">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openDeleteModal(@item.TouristId)">Sil</button>
+                    <button type="button" class="btn btn-warning" onclick="openModal('/Tourist/Edit/@item.TouristId','Turist Güncelle')">Düzenle</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/Tourist/Detail/@item.TouristId','Turist Detayı')">Detay</button>
+                    <button type="button" class="btn btn-danger" onclick="openModal('/Tourist/Delete/@item.TouristId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
-
+@Html.PartialAsync("_CommonModalPartial")
 
 @section Scripts{
+    <script src="~/js/pages/commonModul.js" asp-append-version="true"></script>
     <script src="~/js/pages/touristModul.js" asp-append-version="true"></script>
 }

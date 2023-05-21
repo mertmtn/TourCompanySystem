@@ -1,55 +1,64 @@
 ﻿@model TourCompany.Web.Models.ViewModels.GuideCreateOrEditViewModel
- 
-<div class="row">
-    <div class="col-md-4">
-        <form>
-            <input type="hidden" asp-for="GuideId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Surname" class="control-label"></label>
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" class="selectpicker">
-                    <option value="K">Kadın</option>
-                    <option value="E">Erkek</option>
-                </select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <select asp-for="SelectedLanguages" class="selectpicker" multiple data-live-search="true">
-                @if (Model != null && Model.Languages.Count>0)
-                {
-                    foreach (var language in Model.Languages)
-                    {
-                        <option value="@language.LanguageId" selected=@(Model.SelectedLanguages.Contains(language.LanguageId.ToString())) >@language.Name</option>
-                    }
-                }
-            </select>
-            <div class="form-group">
-                <input type="button" value="Güncelle" onclick="submitForEdit()" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div> 
 
- <script>
-     $(document).ready(function() {
-      $('.my-select').selectpicker();
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <input type="hidden" asp-for="GuideId" />
+                    <div class="form-group">
+                        <label class="control-label">Adı</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Soyadı</label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Cinsiyeti</label>
+                        <select asp-for="Gender" class="selectpicker">
+                            <option value="K">Kadın</option>
+                            <option value="E">Erkek</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Telefon Numarası</label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsActive" /> <label class="control-label">Aktif Mi</label>
+                        </label>
+                    </div>
+                    <label class="control-label">Bilinen Diller</label>
+                    <select asp-for="SelectedLanguages" class="selectpicker" multiple data-live-search="true">
+                        @if (Model != null && Model.Languages.Count > 0)
+                        {
+                            foreach (var language in Model.Languages)
+                            {
+                                <option value="@language.LanguageId" selected=@(Model.SelectedLanguages.Contains(language.LanguageId.ToString()))>@language.Name</option>
+                            }
+                        }
+                    </select>
+                    <div class="form-group">
+                        <input type="button" value="Güncelle" onclick="submitForEdit()" class="btn btn-primary" />
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.my-select').selectpicker();
     });
 </script>

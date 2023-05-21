@@ -28,10 +28,10 @@ namespace TourCompany.Web.Controllers
             return View(_touristService.GetAll());
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Detail(int? id)
         { 
             var tourist = _touristService.GetById(id.Value);
-            return (tourist != null) ? PartialView("~/Views/Tourist/Partials/Details.cshtml", tourist) : NotFound();
+            return (tourist != null) ? PartialView("~/Views/Tourist/Partials/Detail.cshtml", tourist) : NotFound();
         }
 
         public IActionResult Create()

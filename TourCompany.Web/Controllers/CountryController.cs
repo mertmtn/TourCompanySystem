@@ -25,7 +25,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public IActionResult Detail(int? id)
         {
             if (id == null) return NotFound();
             var country = _countryService.GetById(id.Value);

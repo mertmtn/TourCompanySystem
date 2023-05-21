@@ -24,7 +24,7 @@ namespace TourCompany.Web.Controllers
             return View(_languageService.GetAll());
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Detail(int? id)
         {
             var language = _languageService.GetById(id.Value);
             return (language != null) ? PartialView("~/Views/Language/Partials/Detail.cshtml", language) : NotFound();

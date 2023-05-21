@@ -8,8 +8,9 @@
 <h1>Tur Listesi</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Tur Tanımı</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/Tours/Create','Yeni Tur Tanımı')">Yeni Tur Tanımı</button>
 </p>
+
 <table class="table">
     <thead>
         <tr>
@@ -34,31 +35,18 @@
                     @Html.DisplayFor(modelItem => item.TourDate)
                 </td>
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openEditModal(@item.TourId)">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openDetailModal(@item.TourId)">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openDeleteModal(@item.TourId)">Sil</button>
+                    <button type="button" class="btn btn-warning" onclick="openModal('/Tours/Edit/@item.TourId,'Tur Güncelle')">Düzenle</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/Tours/Detail/@item.TourId,'Tur Detayı')">Detay</button>
+                    <button type="button" class="btn btn-danger" onclick="openModal('/Tours/Delete/@item.TourId,'Turu Sil')">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table> 
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
-
+@Html.PartialAsync("_CommonModalPartial")
 
 @section Scripts{
-    <script src="~/js/pages/tourModul.js" asp-append-version="true"></script>
+    <script src="~/js/pages/commonModul.js" asp-append-version="true"></script>
+    <script src="~/js/pages/tourModul.js" asp-append-version="true"></script>  
 }

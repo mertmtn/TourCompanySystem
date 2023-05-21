@@ -1,11 +1,11 @@
-﻿function openDetailModal(id) {
-    $.get("/Country/Details/" + id, function (data, status) {
+﻿function openModal(id) {
+    $.get("/Country/Detail/" + id, function (data, status) {
         $(".modal-body").html(data);
         $(".modal-title").html("Ülke Detayı");
         $("#staticBackdrop").modal('show');
     });
 }
-function openDeleteModal(id) {
+function openModal(id) {
 
     $.get("/Country/Delete/" + id, function (data, status) {
         $(".modal-body").html(data);
@@ -14,7 +14,7 @@ function openDeleteModal(id) {
     });
 }
 
-function openEditModal(id) {
+function openModal(id) {
     $.get("/Country/Edit/" + id, function (data, status) {
         $(".modal-body").html(data);
         $(".modal-title").html("Ülke Güncelle");

@@ -1,42 +1,4 @@
-﻿function openCreateModal() {
-    $.get("/Nationality/Create/", function (data) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Yeni Uyruk Tanımı");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openDetailModal(id) {
-    $.get("/Nationality/Details/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Uyruk Detayı");
-        $("#staticBackdrop").modal('show');
-    });
-}
-function openDeleteModal(id) {
-    $.get("/Nationality/Delete/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Kaydı silmek istediğinizden emin misiniz?");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function openEditModal(id) {
-    $.get("/Nationality/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Uyruk Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
-function btnEdit(id) {
-    $.get("/Nationality/Edit/" + id, function (data, status) {
-        $(".modal-body").html(data);
-        $(".modal-title").html("Uyruk Güncelle");
-        $("#staticBackdrop").modal('show');
-    });
-}
-
+﻿
 function submitForEdit() {
     var nationalityViewModel = {
         Name: $("#Name").val(),
