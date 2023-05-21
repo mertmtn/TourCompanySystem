@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourCompany.Web.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ToursController : Controller
     {
         private readonly ITourService _tourService;

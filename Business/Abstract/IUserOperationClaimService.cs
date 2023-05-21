@@ -1,13 +1,13 @@
 ﻿
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
+using Entities.Concrete;
 
 namespace Business.Abstract
 {
 
     public interface IUserOperationClaimService
     {
-        IResult AddClaimForUser(UserOperationClaim userOperationClaim);
-        IResult RemoveClaimForUser(UserOperationClaim userOperationClaim);
+        IResult UpdateClaimForUser(UserOperationClaim userOperationClaim, string[] selectedClaims); 
     }
 }

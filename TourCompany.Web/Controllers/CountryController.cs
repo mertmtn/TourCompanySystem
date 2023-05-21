@@ -4,9 +4,12 @@ using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourCompany.Web.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CountryController : Controller
     {
         private readonly ICountryService _countryService;

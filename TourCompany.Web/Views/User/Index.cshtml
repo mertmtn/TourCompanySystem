@@ -37,8 +37,7 @@
                 <td>
                     <button type="button" class="btn btn-warning" onclick="openModal('/User/Edit/@item.Id','Kullanıcı Güncelle')">Düzenle</button>
                     <button type="button" class="btn btn-info" onclick="openModal('/User/Detail/@item.Id','Kullanıcı Detayı')">Detay</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/User/GetUserClaimsByUserId/@item.Id','Kullanıcı Rolleri')">Rolleri</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/User/UpdateClaim/@item.Id','Rol Tanımla')">Rol Tanımla</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/User/GetUserClaimsByUserId/@item.Id','Kullanıcı Rolleri')">Rolleri</button>                   
                 </td>                
             </tr>
         }
@@ -49,5 +48,6 @@
 
 @section Scripts{
     <script src="~/js/pages/commonModul.js" asp-append-version="true"></script>
+    <script src="~/js/pages/claimModul.js" asp-append-version="true"></script>
     <script src="~/js/pages/userOperationsModul.js" asp-append-version="true"></script>
 }

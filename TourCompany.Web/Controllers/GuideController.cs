@@ -4,9 +4,12 @@ using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TourCompany.Web.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class GuideController : Controller
     {
         private readonly ILanguageService _languageService;
@@ -20,7 +23,7 @@ namespace TourCompany.Web.Controllers
             _notyf = notyf;
         }
 
-        [HttpGet]
+        [HttpGet] 
         public IActionResult Index()
         {
             return View(_guideService.GetAll());

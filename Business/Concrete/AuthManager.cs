@@ -19,9 +19,7 @@ namespace Business.Concrete
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
-        }
-
-       
+        }       
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
@@ -38,8 +36,6 @@ namespace Business.Concrete
 
             return new SuccessDataResult<User>(userToCheck, UserMessage.SuccessfulLogin);
         }
-
-
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {

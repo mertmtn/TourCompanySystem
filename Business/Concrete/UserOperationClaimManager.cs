@@ -3,6 +3,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
+using Entities.Concrete;
 
 namespace Business.Concrete
 {
@@ -15,16 +16,10 @@ namespace Business.Concrete
             _userOperationClaimDal = userOperationClaimDal;
         }
 
-        public IResult AddClaimForUser(UserOperationClaim userOperationClaim)
+        public IResult UpdateClaimForUser(UserOperationClaim userOperationClaim, string[] selectedClaims)
         {
-            _userOperationClaimDal.Add(userOperationClaim);
-            return new SuccessResult("Rol eklendi.");
-        }
-
-        public IResult RemoveClaimForUser(UserOperationClaim userOperationClaim)
-        {
-            _userOperationClaimDal.Delete(userOperationClaim);
-            return new SuccessResult("Rol silindi.");
+            _userOperationClaimDal.UpdateClaimForUser(userOperationClaim, selectedClaims);
+            return new SuccessResult("Kullanıcı rolleri güncellendi.");
         }
     }
 }

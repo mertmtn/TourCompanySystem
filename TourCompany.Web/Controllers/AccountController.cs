@@ -1,18 +1,25 @@
-﻿using Business.Abstract;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Business.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 
 namespace TourCompany.Web.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private IAuthService _authService; 
-        public AccountController(IAuthService authService)
+        private IAuthService _authService;
+        private IUserService _userService;
+        private readonly INotyfService _notyf;
+
+        public AccountController(IAuthService authService, IUserService userService, INotyfService notyf)
         {
-            _authService = authService; 
+            _authService = authService;
+            _userService = userService;
+            _notyf = notyf;
         }
+
         public ActionResult Login()
         {
             return View(new UserForLoginDto());
@@ -24,19 +31,23 @@ namespace TourCompany.Web.Controllers
             var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
+                _notyf.Error(userToLogin.Message);
                 return View(userForLoginDto);
             }
             var tokenResult = _authService.CreateAccessToken(userToLogin.Data);
             if (tokenResult.Success)
             {
+                var claims = _userService.GetClaimsByUserId(userToLogin.Data.Id).Data;
                 HttpContext.Session.SetString("JWToken", tokenResult.Data.Token);
                 HttpContext.Session.SetString("Name", $"{userToLogin.Data.FirstName} {userToLogin.Data.LastName}");
                 HttpContext.Session.SetString("UserId", userToLogin.Data.Id.ToString());
+                HttpContext.Session.SetString("UserClaim", claims != null && claims.Count > 0 ? claims.FirstOrDefault().Name : "");
+
                 return RedirectToAction("Index", "Home");
             }
             return View(userForLoginDto);
         }
-         
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Logout()
@@ -45,4 +56,4 @@ namespace TourCompany.Web.Controllers
             return RedirectToAction("Login", "Account");
         }
     }
-} 
+}

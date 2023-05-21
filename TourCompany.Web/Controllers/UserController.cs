@@ -1,19 +1,28 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Business.Abstract;
+using Core.Utilities.Results;
 using Entities.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TourCompany.Web.Models.ViewModels;
 
 namespace TourCompany.Web.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : Controller
-    { 
+    {
         private readonly IUserService _userService;
+        private readonly IOperationClaimService _operationClaimService;
         private readonly INotyfService _notyf;
+        private readonly IUserOperationClaimService _userOperationClaimService;
 
-        public UserController(IUserService userService, INotyfService notyf)
+        public UserController(IUserService userService, IOperationClaimService operationClaimService, INotyfService notyf, IUserOperationClaimService userOperationClaimService)
         {
             _userService = userService;
+            _operationClaimService = operationClaimService;
             _notyf = notyf;
+            _userOperationClaimService = userOperationClaimService;
         }
 
         public IActionResult Index()
@@ -44,7 +53,7 @@ namespace TourCompany.Web.Controllers
                 LastName = registerViewModel.LastName,
                 Email = registerViewModel.Email,
                 MaidenName = registerViewModel.MaidenName,
-                Password=registerViewModel.Password
+                Password = registerViewModel.Password
             });
 
             if (registerResult.StatusCode == 400)
@@ -109,9 +118,22 @@ namespace TourCompany.Web.Controllers
 
         [HttpGet]
         public IActionResult GetUserClaimsByUserId(int? id)
-        {
+        { 
             var userOperationClaims = _userService.GetClaimsByUserId(id.Value).Data;
-            return (userOperationClaims != null) ? PartialView("~/Views/Claim/Partials/UserClaimList.cshtml", userOperationClaims) : NotFound();
+            return (userOperationClaims != null) ? PartialView("~/Views/Claim/Partials/UserClaimList.cshtml", new UserOperationClaimCreateOrUpdateViewModel
+            {
+                Claims = _operationClaimService.GetAll().Data,
+                UserId = id.Value,
+                SelectedClaims = _userService.GetClaimsByUserId(id.Value).Data.Select(x=>x.Id.ToString()).ToArray(),
+            }) : NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateClaimForUser(UserOperationClaimCreateOrUpdateViewModel userOperationClaimCreateOrUpdateViewModel)
+        {
+            var result = _userOperationClaimService.UpdateClaimForUser(new Core.Entities.Concrete.UserOperationClaim() { UserId = userOperationClaimCreateOrUpdateViewModel.UserId },
+                userOperationClaimCreateOrUpdateViewModel.SelectedClaims);
+            return Json(result);
         }
     }
 }
