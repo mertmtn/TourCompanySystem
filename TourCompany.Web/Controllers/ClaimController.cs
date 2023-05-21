@@ -1,13 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Business.Abstract;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TourCompany.Web.Controllers
 {
     public class ClaimController : Controller
     {
-        public IActionResult Index()
+        private readonly IOperationClaimService _operationClaimService;
+
+        public ClaimController(IOperationClaimService operationClaimService)
         {
-            return View();
+            _operationClaimService = operationClaimService;
         }
 
+        public IActionResult Index()
+        {
+            return View(_operationClaimService.GetAll().Data );
+        }
     }
 }

@@ -8,7 +8,7 @@
 <h1>Ülke Listesi</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openModal(,'')">Yeni Ülke Ekle</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/Country/Create/','Yeni Ülke Tanım')">Yeni Ülke Ekle</button>
 </p>
 <table class="table">
     <thead>
@@ -27,8 +27,8 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <button role="button" class="btn-warning" onclick="openModal(@item.CountryId,'')">Düzenle</button>
-                    <button class="btn-danger" onclick="openModal(@item.CountryId,'')">Sil</button>
+                    <button role="button" class="btn-warning" onclick="openModal('/Country/Edit/@item.CountryId','Ülke Düzenle')">Düzenle</button>
+                    <button class="btn-danger" onclick="openModal('/Country/Edit/@item.CountryId','Ülke Sil')">Sil</button>
                 </td>
             </tr>
         }

@@ -1,4 +1,4 @@
-﻿@model Entities.DTO.UserForRegisterDto
+﻿@model Entities.DTO.UserCreateOrEditViewModel
  
 <div class="container">
  
@@ -31,8 +31,7 @@
                                 <h6 class="mb-0">Kızlık Soyadı (Varsa)</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input asp-for="MaidenName" class="form-control" type="text" />
-                                <span asp-validation-for="MaidenName" class="text-danger"></span>
+                                <input asp-for="MaidenName" class="form-control" type="text" /> 
                             </div>
                         </div>
 

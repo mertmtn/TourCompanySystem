@@ -10,10 +10,13 @@ namespace Business.Abstract
         IResult UserExists(string email);
         IDataResult<User> GetById(int userId);
         IDataResult<List<User>> GetAll();
-        IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password);
+        IResult Register(UserForRegisterDto userForRegisterDto);
         IResult UpdateUserInfo(User user);
-        IResult Delete(User user);
-        IDataResult<List<OperationClaim>> GetClaims(User user);
+        IResult Delete(User user);        
         IDataResult<User> GetByMail(string email);
+
+        IDataResult<List<OperationClaim>> GetClaims(User user);
+        IDataResult<List<OperationClaim>> GetClaimsByUserId(int userId);
+
     }
 }

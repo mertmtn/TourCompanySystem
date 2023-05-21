@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Entities.Concrete;
 
-namespace TourCompany.Web.Models.Validation
+namespace Business.ValidationRules.FluentValidation
 {
     public class NationalityValidator : AbstractValidator<Nationality>
     {

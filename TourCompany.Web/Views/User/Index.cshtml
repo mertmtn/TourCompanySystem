@@ -8,7 +8,7 @@
 <h1>Kullanıcılar</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openModal('/User/Register','Yeni Tur Tanımı')">Yeni Tur Tanımı</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/User/Create','Yeni Kullanıcı Tanımı')">Yeni Kullanıcı Tanımı</button>
 </p>
 
 <table class="table">
@@ -36,7 +36,9 @@
                 </td>
                 <td>
                     <button type="button" class="btn btn-warning" onclick="openModal('/User/Edit/@item.Id','Kullanıcı Güncelle')">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/User/Detail/@item.Id','Kullanıcı Detayı')">Detay</button> 
+                    <button type="button" class="btn btn-info" onclick="openModal('/User/Detail/@item.Id','Kullanıcı Detayı')">Detay</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/User/GetUserClaimsByUserId/@item.Id','Kullanıcı Rolleri')">Rolleri</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/User/UpdateClaim/@item.Id','Rol Tanımla')">Rol Tanımla</button>
                 </td>                
             </tr>
         }

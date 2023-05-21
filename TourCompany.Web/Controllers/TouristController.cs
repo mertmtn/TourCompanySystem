@@ -64,7 +64,7 @@ namespace TourCompany.Web.Controllers
                 }
                 ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
                 ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
-                return PartialView("~/Views/Place/Partials/Create.cshtml", touristViewModel);
+                return PartialView("~/Views/Tourist/Partials/Create.cshtml", touristViewModel);
             }
 
             return Json(result); 
@@ -124,9 +124,7 @@ namespace TourCompany.Web.Controllers
 
         public IActionResult Delete(int? id)
         {
-           var tourist = _touristService.GetById(id.Value);
-
-            
+           var tourist = _touristService.GetById(id.Value);            
             return (tourist != null) ? PartialView("~/Views/Tourist/Partials/Delete.cshtml", tourist) : NotFound();
         }
 

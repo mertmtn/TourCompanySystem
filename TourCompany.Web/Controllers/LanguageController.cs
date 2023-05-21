@@ -64,7 +64,7 @@ namespace TourCompany.Web.Controllers
         {
             var language = _languageService.GetById(id.Value);
 
-            return (language != null) ? PartialView(new LanguageCreateOrEditViewModel()
+            return (language != null) ? PartialView("~/Views/Language/Partials/Edit.cshtml",new LanguageCreateOrEditViewModel()
             {
                 LanguageId = language.LanguageId,
                 Name = language.Name,

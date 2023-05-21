@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Entities.Concrete;
 
 namespace TourCompany.Web.Controllers
 {
@@ -60,7 +61,7 @@ namespace TourCompany.Web.Controllers
                 }
 
                 guideViewModel.Languages = _languageService.GetAll();
-                return PartialView("~/Views/Place/Partials/Create.cshtml", guideViewModel);
+                return PartialView("~/Views/Guide/Partials/Create.cshtml", guideViewModel);
             }
 
             return Json(result);
@@ -71,7 +72,7 @@ namespace TourCompany.Web.Controllers
             var guide = _guideService.GetById(id.Value);
 
             return (guide != null) ?
-              PartialView(new GuideCreateOrEditViewModel()
+              PartialView("~/Views/Guide/Partials/Edit.cshtml",new GuideCreateOrEditViewModel()
               {
                   Languages = _languageService.GetAll(),
                   SelectedLanguages = guide.Languages.Select(x => x.LanguageId.ToString()).ToArray(),
@@ -107,7 +108,7 @@ namespace TourCompany.Web.Controllers
                 }
 
                 guideViewModel.Languages = _languageService.GetAll();
-                return PartialView("~/Views/Place/Partials/Create.cshtml", guideViewModel);
+                return PartialView("~/Views/Guide/Partials/Edit.cshtml", guideViewModel);
             }
 
             return Json(result);
@@ -117,7 +118,7 @@ namespace TourCompany.Web.Controllers
         public IActionResult Delete(int? id)
         {
             var guide = _guideService.GetById(id.Value);
-            return (guide != null) ? View(guide) : NotFound();
+            return (guide != null) ? PartialView("~/Views/Guide/Partials/Delete.cshtml", guide) : NotFound();
         }
 
 

@@ -26,6 +26,13 @@ function submitForEdit() {
             },
             callback: function () { window.location.href = "/Nationality" } // Callback after click
         }).showToast();
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
+        }
     });
 }
 
@@ -61,13 +68,15 @@ function submitForCreate() {
         }
         else {
             $(".modal-body").html(data);
-            $(".modal-title").html("Yeni Bölge Tanımı");
+            $(".modal-title").html("Yeni Uyruk Tanımı");
             $("#staticBackdrop").modal('show');
+        }
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
         }
     });
 }
-
-
-
-
-

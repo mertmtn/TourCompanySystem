@@ -7,10 +7,7 @@ namespace Business.Abstract
 
     public interface IUserOperationClaimService
     {
-        IDataResult<OperationClaim> GetById(int claimId);
-        IDataResult<List<OperationClaim>> GetAll();
-        IResult Add(OperationClaim claim);
-        IResult Update(OperationClaim claim);
-        IDataResult<OperationClaim> GetByUserId(int userId);
+        IResult AddClaimForUser(UserOperationClaim userOperationClaim);
+        IResult RemoveClaimForUser(UserOperationClaim userOperationClaim);
     }
 }

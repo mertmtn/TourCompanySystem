@@ -28,6 +28,13 @@
             callback: function () { window.location.href ="/Country" } // Callback after click
         }).showToast();
 
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
+        }
     });
 }
 
@@ -65,6 +72,13 @@ function submitForCreate() {
             $(".modal-body").html(data);
             $(".modal-title").html("Yeni Ülke Tanımı");
             $("#staticBackdrop").modal('show');
+        }
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
         }
     });
 }

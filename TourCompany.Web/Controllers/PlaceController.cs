@@ -93,7 +93,7 @@ namespace TourCompany.Web.Controllers
                     ModelState.AddModelError(message.Key, message.Value);
                 }
 
-                return PartialView("~/Views/Language/Partials/Create.cshtml", placeViewModel);
+                return PartialView("~/Views/Place/Partials/Edit.cshtml", placeViewModel);
             }
 
             return Json(result);

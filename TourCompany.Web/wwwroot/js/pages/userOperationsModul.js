@@ -1,19 +1,18 @@
 function submitForEdit() {
 
-    var userForRegisterDto = {
+    var registerViewModel = {
         FirstName: $("#FirstName").val(),
         LastName: $("#LastName").val(),
         MaidenName: $("#MaidenName").val(),
         Email: $("#Email").val(),
         Id: $("#Id").val(),
-        IsActive: $("#IsActive").val(),
-        Password: $("#Password").val()        
+        IsActive: $("#IsActive").val()      
     };
 
     $.ajax({
         type: "POST",
         url: "/User/Edit/",
-        data: userForRegisterDto,
+        data: registerViewModel,
 
 
         encode: true,
@@ -39,19 +38,20 @@ function submitForEdit() {
 
 function submitForCreate() {
 
-    var userForRegisterDto = {
+    var registerViewModel = {
         FirstName: $("#FirstName").val(),
         LastName: $("#LastName").val(),
         MaidenName: $("#MaidenName").val(),
         Email: $("#Email").val(),
         Id: $("#Id").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").val(),
+        Password: $("#Password").val()  
     };
 
     $.ajax({
         type: "POST",
-        url: "/User/Register/",
-        data: userForRegisterDto,
+        url: "/User/Create/",
+        data: registerViewModel,
         encode: true,
     }).done(function (data) {
         if (data.success) {
@@ -71,8 +71,15 @@ function submitForCreate() {
         }
         else {
             $(".modal-body").html(data);
-            $(".modal-title").html("Yeni Ülke Tanýmý");
+            $(".modal-title").html("Yeni KullanÄ±cÄ± TanÄ±mÄ±");
             $("#staticBackdrop").modal('show');
         }
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status===400) {
+            console.log(jqXHR.responseText)
+        }    
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
+        }  
     });
 }

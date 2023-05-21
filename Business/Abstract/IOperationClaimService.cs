@@ -1,5 +1,4 @@
-﻿
-using Core.Entities.Concrete;
+﻿using Core.Entities.Concrete;
 using Core.Utilities.Results;
 
 namespace Business.Abstract
@@ -8,7 +7,6 @@ namespace Business.Abstract
     {
         IDataResult<OperationClaim> GetById(int claimId);
         IDataResult<List<OperationClaim>> GetAll();
-        IResult Add(OperationClaim claim);
-        IResult Update(OperationClaim claim); 
+        IResult Add(OperationClaim claim); 
     }
 }

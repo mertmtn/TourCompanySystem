@@ -3,9 +3,9 @@ using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using TourCompany.Web.Models.Validation;
 using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
+using Business.ValidationRules.FluentValidation;
 
 namespace Business.Concrete
 {

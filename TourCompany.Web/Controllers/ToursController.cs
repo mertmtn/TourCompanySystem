@@ -75,7 +75,7 @@ namespace TourCompany.Web.Controllers
 
             return (tour != null)
             ?
-                 PartialView("~/Views/Tourist/Partials/Edit.cshtml", new TourCreateOrEditViewModel()
+                 PartialView("~/Views/Tours/Partials/Edit.cshtml", new TourCreateOrEditViewModel()
                  {
                      GuideId = tour.GuideId,
                      Guides = _guideService.GetAll(),

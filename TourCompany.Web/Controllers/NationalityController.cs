@@ -53,7 +53,7 @@ namespace TourCompany.Web.Controllers
                     ModelState.AddModelError(message.Key, message.Value);
                 }
 
-                return PartialView("~/Views/Place/Partials/Create.cshtml", nationalityViewModel);
+                return PartialView("~/Views/Nationality/Partials/Create.cshtml", nationalityViewModel);
             }
 
             return Json(result);
@@ -62,7 +62,7 @@ namespace TourCompany.Web.Controllers
         public IActionResult Edit(int? id)
         {
             var nationality = _nationalityService.GetById(id.Value);
-            return (nationality != null) ? PartialView("~/Views/Place/Partials/Edit.cshtml", new NationalityCreateOrEditViewModel()
+            return (nationality != null) ? PartialView("~/Views/Nationality/Partials/Edit.cshtml", new NationalityCreateOrEditViewModel()
             {
                 Name = nationality.Name,
                 IsActive = nationality.IsActive,

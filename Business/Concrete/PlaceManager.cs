@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
@@ -6,7 +7,6 @@ using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Linq.Expressions;
-using TourCompany.Web.Models.Validation;
 
 namespace Business.Concrete
 {

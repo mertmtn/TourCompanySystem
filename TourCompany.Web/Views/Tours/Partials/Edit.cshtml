@@ -36,7 +36,7 @@
                                 <h6 class="mb-0">Tur Rehberi</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <select asp-for="GuideId" class="selectpicker" data-live-search="true">
+                                <select asp-for="GuideId" class="selectpicker" data-live-search="true" data-actions-box="true">
                                     @if (Model != null && Model.Guides.Count > 0)
                                     {
                                         foreach (var guide in Model.Guides)
@@ -62,7 +62,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Yabancı Dil Bilgisi</h6>
+                                <h6 class="mb-0">Tur Bölgeleri</h6>
                             </div><div class="col-sm-9 text-secondary">
                                 <select asp-for="SelectedPlaces" class="selectpicker" multiple data-actions-box="true" data-live-search="true" data-max-options="3">
                                     @if (Model != null && Model.Places.Count > 0)
@@ -95,11 +95,11 @@
 
         </div>
     </div>
-</div>
+</div> 
 
 
 <script>
-    $(document).ready(function () {
-        $('.my-select').selectpicker();
-    });
+    $(document).ajaxComplete(function () {
+        $('.selectpicker').selectpicker();
+    }); 
 </script>

@@ -3,7 +3,10 @@ function submitForEdit() {
     var touristViewModel = {
         Name: $("#Name").val(),
         TouristId: $("#TouristId").val(),
-        Price: $("#Price").val(),
+        Gender: $("#Gender").val(),
+        CountryId: $("#CountryId").val(),
+        NationalityId: $("#NationalityId").val(),
+        Surname: $("#Surname").val(),
         IsActive: $("#IsActive").val()
     };
 
@@ -34,7 +37,11 @@ function submitForCreate() {
 
     var touristViewModel = {
         Name: $("#Name").val(),
-        Price: $("#Price").val(),
+        TouristId: $("#TouristId").val(),
+        Gender: $("#Gender").val(),
+        CountryId: $("#CountryId").val(),
+        NationalityId: $("#NationalityId").val(),
+        Surname: $("#Surname").val(),
         IsActive: $("#IsActive").val()
     };
 
@@ -61,8 +68,15 @@ function submitForCreate() {
         }
         else {
             $(".modal-body").html(data);
-            $(".modal-title").html("Yeni Bölge Tanımı");
+            $(".modal-title").html("Yeni Turist Tanımı");
             $("#staticBackdrop").modal('show');
+        }
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
         }
     });
 }

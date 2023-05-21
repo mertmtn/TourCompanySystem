@@ -26,6 +26,13 @@ function submitForEdit() {
             },
             callback: function () { window.location.href = "/Tours" } // Callback after click
         }).showToast();
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
+        }
     });
 }
 
@@ -61,8 +68,15 @@ function submitForCreate() {
         }
         else {
             $(".modal-body").html(data);
-            $(".modal-title").html("Yeni Bölge Tanýmý");
+            $(".modal-title").html("Yeni Tur Tanýmý");
             $("#staticBackdrop").modal('show');
+        }
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
         }
     });
 }

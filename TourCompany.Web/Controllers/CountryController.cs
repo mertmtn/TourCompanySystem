@@ -88,9 +88,8 @@ namespace TourCompany.Web.Controllers
 
 
         public IActionResult Delete(int? id)
-        {
-            if (id == null) return NotFound();
-            Country country = _countryService.GetById(id.Value);
+        { 
+            var country = _countryService.GetById(id.Value);
             return (country != null) ? PartialView("~/Views/Country/Partials/Delete.cshtml", country) : NotFound();
         }
 

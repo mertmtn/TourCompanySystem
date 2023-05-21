@@ -1,7 +1,6 @@
-﻿using Core.Aspects.Autofac.Validation;
+﻿ 
 using Core.Utilities.Results;
-using Entities.Concrete;
-using TourCompany.Web.Models.Validation;
+using Entities.Concrete; 
 
 namespace Business.Abstract
 {

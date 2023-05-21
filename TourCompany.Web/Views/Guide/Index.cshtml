@@ -8,7 +8,7 @@
 <h1>Rehber Listesi</h1>
 
 <p>
-    <button type="button" class="btn btn-primary" onclick="openModal(,'')">Yeni Rehber Tanımla</button>
+    <button type="button" class="btn btn-primary" onclick="openModal('/Guide/Create/','Yeni Rehber Tanım')">Yeni Rehber Tanımla</button>
 </p>
 <table class="table">
     <thead>
@@ -33,9 +33,9 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openModal(@item.GuideId,'')">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openModal(@item.GuideId,'')">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openModal(@item.GuideId,'')">Sil</button>
+                    <button type="button" class="btn btn-warning" onclick="openModal('/Guide/Edit/@item.GuideId','')">Düzenle</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/Guide/Detail/@item.GuideId','')">Detay</button>
+                    <button type="button" class="btn btn-danger" onclick="openModal('/Guide/Delete/@item.GuideId','')">Sil</button>
                 </td>
             </tr>
         }
