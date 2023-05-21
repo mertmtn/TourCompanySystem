@@ -28,19 +28,18 @@ namespace TourCompany.Web.Controllers
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
-            Country country = _countryService.GetById(id.Value);
+            var country = _countryService.GetById(id.Value);
             return (country != null) ? PartialView("~/Views/Country/Partials/Detail.cshtml", country) : NotFound();
         }
 
-
         public IActionResult Create()
         {
-            return View();
+            return PartialView("~/Views/Country/Partials/Create.cshtml");
         }
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(CountryCreateOrEditViewModel countryViewModel)
         {
             var result = _countryService.Add(new Country()
@@ -49,26 +48,22 @@ namespace TourCompany.Web.Controllers
                 IsActive = countryViewModel.IsActive
             });
 
-            if (result.StatusCode == 200)
+            if (result.StatusCode == 400)
             {
-                _notyf.Success("Kayıt işlemi başarılıdır.");
-                return RedirectToAction(nameof(Index));
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Country/Partials/Create.cshtml", countryViewModel);
             }
 
-            foreach (var message in result.MessageList)
-            {
-                ModelState.AddModelError(message.Key, message.Value);
-            }
-
-
-            return View(countryViewModel);
+            return Json(result);
         }
 
         public IActionResult Edit(int? id)
         {
-            if (id == null) return NotFound();
-
-            Country country = _countryService.GetById(id.Value);
+            var country = _countryService.GetById(id.Value);
 
             return (country != null) ? PartialView("~/Views/Country/Partials/Edit.cshtml", new CountryCreateOrEditViewModel()
             {

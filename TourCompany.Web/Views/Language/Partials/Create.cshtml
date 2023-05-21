@@ -1,38 +1,22 @@
-﻿@model TourCompany.Web.Models.ViewModels.NationalityCreateOrEditViewModel
-
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
+﻿@model TourCompany.Web.Models.ViewModels.LanguageCreateOrEditViewModel
  
-
 <div class="container">
-
-    <h4>Uyruk Güncelleme</h4>
-    <div>
-        <a asp-action="Index" class="btn btn-primary px-4">Uyruk listesine git</a>
-    </div>
-
+ 
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="NationalityId" />
+                    <form> 
                         <div class="row mb-3">
 
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Uyruk Adı</h6>
+                                <h6 class="mb-0">Dil Adı</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
                                 <input asp-for="Name" class="form-control" />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
-
-                        </div>
-                        
+                        </div>                       
 
                         <div class="row mb-3">
                             <div class="col-sm-3">
@@ -49,7 +33,7 @@
                         <div class="row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="submit" value="Kaydet" class="btn btn-primary px-4" />
+                                <input type="button" onclick="submitForCreate()" value="Kaydet" class="btn btn-primary px-4" />
                             </div>
                         </div>
                     </form>
@@ -66,3 +50,4 @@
     </div>
 </div>
 
+ 

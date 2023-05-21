@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace TourCompany.Web.Controllers
 {
@@ -12,13 +13,14 @@ namespace TourCompany.Web.Controllers
         private readonly ICountryService _countryService;
         private readonly INationalityService _nationalityService;
         private readonly ITouristService _touristService;
-        public TouristController(ICountryService countryService,
-            INationalityService nationalityService,
-            ITouristService touristService)
+        private readonly INotyfService _notyf;
+
+        public TouristController(ICountryService countryService, INationalityService nationalityService, ITouristService touristService, INotyfService notyf)
         {
             _countryService = countryService;
             _nationalityService = nationalityService;
             _touristService = touristService;
+            _notyf = notyf;
         }
 
         public IActionResult Index()
@@ -27,25 +29,24 @@ namespace TourCompany.Web.Controllers
         }
 
         public IActionResult Details(int? id)
-        {
-            if (id == null) return NotFound();
-            Tourist tourist = _touristService.GetById(id.Value);
-            return (tourist != null) ? View(tourist) : NotFound();
+        { 
+            var tourist = _touristService.GetById(id.Value);
+            return (tourist != null) ? PartialView("~/Views/Tourist/Partials/Details.cshtml", tourist) : NotFound();
         }
 
         public IActionResult Create()
         {
             ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name");
             ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name");
-            return View();
+            return PartialView("~/Views/Tourist/Partials/Create.cshtml");
         }
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(TouristCreateOrEditViewModel touristViewModel)
-        {
-            Tourist tourist = new()
+        { 
+            var result = _touristService.Add(new()
             {
                 Name = touristViewModel.Name,
                 BirthDate = touristViewModel.BirthDate.GetValueOrDefault(),
@@ -53,33 +54,32 @@ namespace TourCompany.Web.Controllers
                 CountryId = touristViewModel.CountryId.GetValueOrDefault(),
                 NationalityId = touristViewModel.NationalityId.GetValueOrDefault(),
                 Surname = touristViewModel.Surname
-            };
+            });
 
-            var result = _touristService.Add(tourist);
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+                ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
+                ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
+                return PartialView("~/Views/Place/Partials/Create.cshtml", touristViewModel);
             }
 
-            ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
-            ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
-            return View(touristViewModel);
+            return Json(result); 
         }
 
 
         public IActionResult Edit(int? id)
-        {
-            if (id == null) return NotFound();
-
+        { 
             var tourist = _touristService.GetById(id.Value);
             if (tourist != null)
             {
                 ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", tourist.CountryId);
                 ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", tourist.NationalityId);
 
-                return View(new TouristCreateOrEditViewModel()
+                return PartialView("~/Views/Tourist/Partials/Edit.cshtml", new TouristCreateOrEditViewModel()
                 {
                     TouristId = tourist.TouristId,
                     Name = tourist.Name,
@@ -94,12 +94,10 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Edit(int id, TouristCreateOrEditViewModel touristViewModel)
-        {
-            if (id != touristViewModel.TouristId) return NotFound();
-
-            Tourist tourist = new()
+        {   
+            var result = _touristService.Update(new()
             {
                 TouristId = touristViewModel.TouristId,
                 Name = touristViewModel.Name,
@@ -108,36 +106,37 @@ namespace TourCompany.Web.Controllers
                 CountryId = touristViewModel.CountryId.GetValueOrDefault(),
                 NationalityId = touristViewModel.NationalityId.GetValueOrDefault(),
                 Surname = touristViewModel.Surname
-            };
+            });
 
-            var result = _touristService.Update(tourist);
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+                ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
+                ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
+                return PartialView("~/Views/Tourist/Partials/Edit.cshtml", touristViewModel);
             }
 
-            ViewData["CountryId"] = new SelectList(_countryService.GetAll(), "CountryId", "Name", touristViewModel.CountryId);
-            ViewData["NationalityId"] = new SelectList(_nationalityService.GetAll(), "NationalityId", "Name", touristViewModel.NationalityId);
-            return View(touristViewModel);
+            return Json(result);
         }
 
         public IActionResult Delete(int? id)
         {
-            if (id == null) return NotFound();
+           var tourist = _touristService.GetById(id.Value);
 
-            Tourist tourist = _touristService.GetById(id.Value);
-
-            return (tourist != null) ? View(tourist) : NotFound();
+            
+            return (tourist != null) ? PartialView("~/Views/Tourist/Partials/Delete.cshtml", tourist) : NotFound();
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Tourist tourist = _touristService.GetById(id);
+            var tourist = _touristService.GetById(id);
             _touristService.Delete(tourist);
+            _notyf.Success("Silme işlemi başarılıdır.");
             return RedirectToAction(nameof(Index));
         }
     }

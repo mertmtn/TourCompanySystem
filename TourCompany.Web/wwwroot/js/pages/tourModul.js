@@ -1,57 +1,60 @@
-ï»¿function openDetailModal(id) {
-    $.get("/Country/Details/" + id, function (data, status) {
+function openCreateModal() {
+    $.get("/Tours/Create/", function (data) {
         $(".modal-body").html(data);
-        $(".modal-title").html("Ãœlke DetayÄ±");
+        $(".modal-title").html("Yeni Tur Tanýmý");
+        $("#staticBackdrop").modal('show');
+    });
+}
+
+function openDetailModal(id) {
+    $.get("/Tours/Details/" + id, function (data, status) {
+        $(".modal-body").html(data);
+        $(".modal-title").html("Tur Detayý");
         $("#staticBackdrop").modal('show');
     });
 }
 function openDeleteModal(id) {
-
-    $.get("/Country/Delete/" + id, function (data, status) {
+    $.get("/Tours/Delete/" + id, function (data, status) {
         $(".modal-body").html(data);
-        $(".modal-title").html("Ãœlke Silme Onaylama");
+        $(".modal-title").html("Kaydý silmek istediðinizden emin misiniz?");
         $("#staticBackdrop").modal('show');
     });
 }
 
 function openEditModal(id) {
-    $.get("/Country/Edit/" + id, function (data, status) {
+    $.get("/Tours/Edit/" + id, function (data, status) {
         $(".modal-body").html(data);
-        $(".modal-title").html("Ãœlke GÃ¼ncelle");
+        $(".modal-title").html("Tur Güncelle");
         $("#staticBackdrop").modal('show');
     });
 }
 
-
-
 function btnEdit(id) {
-    $.get("/Country/Edit/" + id, function (data, status) {
+    $.get("/Tours/Edit/" + id, function (data, status) {
         $(".modal-body").html(data);
-        $(".modal-title").html("Ãœlke GÃ¼ncelle");
+        $(".modal-title").html("Tur Güncelle");
         $("#staticBackdrop").modal('show');
     });
 }
 
 function submitForEdit() {
-
-    var countryViewModel = {
+    var tourViewModel = {
         Name: $("#Name").val(),
-        CountryId: $("#CountryId").val(),
+        TourId: $("#TourId").val(),
+        Price: $("#Price").val(),
         IsActive: $("#IsActive").val()
-    }; 
+    };
 
     $.ajax({
         type: "POST",
-        url: "/Country/Edit/",
-        data: countryViewModel,
-       
-      
+        url: "/Tours/Edit/",
+        data: tourViewModel,
         encode: true,
     }).done(function (data) {
         $("#staticBackdrop").modal('hide');
         Toastify({
             text: data.message,
-            duration: 1500,            
+            duration: 1500,
             close: true,
             gravity: "top", // `top` or `bottom`
             position: "left", // `left`, `center` or `right`
@@ -59,25 +62,24 @@ function submitForEdit() {
             style: {
                 background: "linear-gradient(to right, #00b09b, #96c93d)",
             },
-            callback: function () { window.location.href ="/Country" } // Callback after click
+            callback: function () { window.location.href = "/Tours" } // Callback after click
         }).showToast();
-
     });
 }
 
 
-
 function submitForCreate() {
 
-    var countryViewModel = {
-        Name: $("#Name").val(), 
+    var tourViewModel = {
+        Name: $("#Name").val(),
+        Price: $("#Price").val(),
         IsActive: $("#IsActive").val()
-    }; 
+    };
 
     $.ajax({
         type: "POST",
-        url: "/Country/Create/",
-        data: countryViewModel,
+        url: "/Tours/Create/",
+        data: tourViewModel,
         encode: true,
     }).done(function (data) {
         if (data.success) {
@@ -92,16 +94,17 @@ function submitForCreate() {
                 style: {
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
                 },
-                callback: function () { window.location.href = "/Country" } // Callback after click
+                callback: function () { window.location.href = "/Tours" } // Callback after click
             }).showToast();
         }
         else {
             $(".modal-body").html(data);
-            $(".modal-title").html("Yeni Ãœlke TanÄ±mÄ±");
+            $(".modal-title").html("Yeni Bölge Tanýmý");
             $("#staticBackdrop").modal('show');
         }
     });
 }
+
 
 
 

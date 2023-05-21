@@ -1,5 +1,4 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TourCompany.Web.Controllers
@@ -13,7 +12,8 @@ namespace TourCompany.Web.Controllers
         }
         public IActionResult Index()
         {
-            _notyf.Success("Success Notification");
+            //TODO: Kullanıcı karşılama eklenecek.
+           // _notyf.Success("Success Notification");
             return View();
         } 
     }

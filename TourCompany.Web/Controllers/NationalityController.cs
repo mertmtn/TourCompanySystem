@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace TourCompany.Web.Controllers
 {
     public class NationalityController : Controller
     {
         private readonly INationalityService _nationalityService;
+        private readonly INotyfService _notyf;
 
-        public NationalityController(INationalityService nationalityService)
+        public NationalityController(INationalityService nationalityService, INotyfService notyf)
         {
             _nationalityService = nationalityService;
+            _notyf = notyf;
         }
 
         [HttpGet]
@@ -24,20 +27,17 @@ namespace TourCompany.Web.Controllers
         [HttpGet]
         public IActionResult Details(int? id)
         {
-            if (id == null) return NotFound();
-
-            Nationality nationality = _nationalityService.GetById(id.Value);
-
+            var nationality = _nationalityService.GetById(id.Value);
             return (nationality != null) ? PartialView("~/Views/Nationality/Partials/Detail.cshtml", nationality) : NotFound();
         }
 
         public IActionResult Create()
         {
-            return View();
+            return PartialView("~/Views/Nationality/Partials/Create.cshtml");
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(NationalityCreateOrEditViewModel nationalityViewModel)
         {
             var result = _nationalityService.Add(new Nationality()
@@ -45,62 +45,59 @@ namespace TourCompany.Web.Controllers
                 Name = nationalityViewModel.Name,
                 IsActive = nationalityViewModel.IsActive
             });
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Place/Partials/Create.cshtml", nationalityViewModel);
             }
 
-            return View(nationalityViewModel);
+            return Json(result);
         }
 
         public IActionResult Edit(int? id)
         {
-            if (id == null) return NotFound();
-
-            Nationality nationality = _nationalityService.GetById(id.Value);
-
-            if (nationality != null)
+            var nationality = _nationalityService.GetById(id.Value);
+            return (nationality != null) ? PartialView("~/Views/Place/Partials/Edit.cshtml", new NationalityCreateOrEditViewModel()
             {
-                return View(new NationalityCreateOrEditViewModel()
-                {
-                    Name = nationality.Name,
-                    IsActive = nationality.IsActive,
-                    NationalityId = nationality.NationalityId
-                });
-            }
-            return NotFound();
+                Name = nationality.Name,
+                IsActive = nationality.IsActive,
+                NationalityId = nationality.NationalityId
+            }) : NotFound();
+
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, NationalityCreateOrEditViewModel nationalityViewModel)
         {
-            if (id != nationalityViewModel.NationalityId) return NotFound();
-
             var result = _nationalityService.Update(new Nationality()
             {
                 Name = nationalityViewModel.Name,
                 NationalityId = nationalityViewModel.NationalityId,
                 IsActive = nationalityViewModel.IsActive
             });
-            
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Nationality/Partials/Create.cshtml", nationalityViewModel);
             }
-            return View(nationalityViewModel);
+
+            return Json(result);
         }
 
         public IActionResult Delete(int? id)
         {
-            if (id == null) return NotFound();
-
-            Nationality nationality = _nationalityService.GetById(id.Value);
-
+            var nationality = _nationalityService.GetById(id.Value);
             return (nationality != null) ? PartialView("~/Views/Nationality/Partials/Delete.cshtml", nationality) : NotFound();
         }
 
@@ -109,8 +106,9 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Nationality nationality = _nationalityService.GetById(id);
+            var nationality = _nationalityService.GetById(id);
             _nationalityService.Delete(nationality);
+            _notyf.Success("Silme işlemi başarılıdır.");
             return RedirectToAction(nameof(Index));
         }
     }

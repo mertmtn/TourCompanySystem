@@ -1,10 +1,4 @@
-﻿@model Entities.Concrete.Place
-
-@{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
+﻿@model Entities.Concrete.Guide 
  
 <div class="container">
     <div class="main-body">
@@ -14,9 +8,8 @@
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
                             <div class="mt-3">
-                                <h4> @Html.DisplayFor(model => model.Name)</h4>
-                                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.PlaceId">Bilgileri Güncelle</a>
-                                <a class="btn btn-outline-primary" asp-action="Index">Bölge Listesine Dön</a>
+                                <h4> @Html.DisplayFor(model => model.Name) @Html.DisplayFor(model => model.Surname)</h4>
+                                
                             </div>
                         </div>
                         <hr class="my-4">
@@ -26,8 +19,23 @@
                                 <span class="text-secondary"> @Html.DisplayFor(model => model.Name)</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0">Fiyatı</h6>
-                                <span class="text-secondary"> @Html.DisplayFor(model => model.Price)</span>
+                                <h6 class="mb-0">Soyadı</h6>
+                                <span class="text-secondary"> @Html.DisplayFor(model => model.Surname)</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Telefon</h6>
+                                <span class="text-secondary"> @Html.DisplayFor(model => model.PhoneNumber)</span>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Cinsiyet</h6>
+                                <span class="text-secondary">@(Model.Gender=='E'?"Erkek":"Kadın")</span>
+                            </li>                            
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0">Bilinen Diller</h6>
+                                <span class="text-secondary">
+                                    @String.Join(",", Model.Languages.Select(x=>x.Name).ToArray())
+                               </span> 
                             </li>
                              <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">Aktif Mi?</h6>

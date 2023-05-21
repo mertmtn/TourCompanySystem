@@ -1,18 +1,20 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace TourCompany.Web.Controllers
 {
     public class PlaceController : Controller
     {
-
         private readonly IPlaceService _placeService;
-        public PlaceController(IPlaceService placeService)
+        private readonly INotyfService _notyf;
+
+        public PlaceController(IPlaceService placeService, INotyfService notyf)
         {
             _placeService = placeService;
+            _notyf = notyf;
         }
 
         [HttpGet]
@@ -24,103 +26,93 @@ namespace TourCompany.Web.Controllers
         [HttpGet]
         public IActionResult Details(int? id)
         {
-            if (id == null) return NotFound();
-
-            Place place = _placeService.GetById(id.Value);
-
-            return (place != null) ? View(place) : NotFound();
+            var place = _placeService.GetById(id.Value);
+            return (place != null) ? PartialView("~/Views/Place/Partials/Detail.cshtml", place) : NotFound();
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return PartialView("~/Views/Place/Partials/Create.cshtml");
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(PlaceCreateOrEditViewModel placeViewModel)
-        {
-            Place guide = new()
+        {  
+            var result = _placeService.Add(new()
             {
                 IsActive = placeViewModel.IsActive,
                 Name = placeViewModel.Name,
                 Price = placeViewModel.Price.GetValueOrDefault()
-            };
+            });
 
-            var result = _placeService.Add(guide);
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Place/Partials/Create.cshtml", placeViewModel);
             }
 
-            return View(placeViewModel);
+            return Json(result); 
         }
 
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            if (id == null) return NotFound();
+            var place = _placeService.GetById(id.Value);
 
-            Place place = _placeService.GetById(id.Value);
-
-            if (place != null)
+            return (place != null) ? PartialView("~/Views/Place/Partials/Edit.cshtml", new PlaceCreateOrEditViewModel()
             {
-                return View(new PlaceCreateOrEditViewModel()
-                {
-                    PlaceId = place.PlaceId,
-                    IsActive = place.IsActive,
-                    Name = place.Name,
-                    Price = place.Price
-                });
-            }
-            return NotFound();
+                PlaceId = place.PlaceId,
+                IsActive = place.IsActive,
+                Name = place.Name,
+                Price = place.Price
+            }) : NotFound(); 
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, PlaceCreateOrEditViewModel placeViewModel)
-        {
-            if (id != placeViewModel.PlaceId) return NotFound();
-
-            Place place = new()
+        //[ValidateAntiForgeryToken]
+        public IActionResult Edit(PlaceCreateOrEditViewModel placeViewModel)
+        { 
+            var result = _placeService.Update(new()
             {
                 PlaceId = placeViewModel.PlaceId,
                 IsActive = placeViewModel.IsActive,
                 Name = placeViewModel.Name,
                 Price = placeViewModel.Price.GetValueOrDefault()
-            };
+            });
 
-            var result = _placeService.Update(place);
-
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Language/Partials/Create.cshtml", placeViewModel);
             }
-            return View(placeViewModel);
-        }
+
+            return Json(result);
+        } 
 
         public IActionResult Delete(int? id)
-        {
-            if (id == null) return NotFound();
-
-            Place place = _placeService.GetById(id.Value);
-
-            return (place != null) ? View(place) : NotFound();
+        { 
+            var place = _placeService.GetById(id.Value);
+            return (place != null) ? PartialView("~/Views/Place/Partials/Delete.cshtml", place) : NotFound();
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Place place = _placeService.GetById(id);
+            var place = _placeService.GetById(id);
             _placeService.Delete(place);
+            _notyf.Success("Silme işlemi başarılıdır.");
             return RedirectToAction(nameof(Index));
-        }
-
+        } 
     }
 }

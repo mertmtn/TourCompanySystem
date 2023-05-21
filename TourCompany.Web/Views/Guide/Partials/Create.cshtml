@@ -1,25 +1,12 @@
 ﻿@model TourCompany.Web.Models.ViewModels.GuideCreateOrEditViewModel
-
-@{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
  
 <div class="container">
     
-    <h4>Rehber Tanım</h4>
-    <div>
-        <a  asp-action="Index" class="btn btn-primary px-4">Rehber listesine git</a>
-    </div>
-
-
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form> 
                         <div class="row mb-3">
 
                             <div class="col-sm-3">
@@ -96,7 +83,7 @@
                         <div class="row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="submit" value="Kaydet" class="btn btn-primary px-4" />
+                                <input type="button" onclick="submitForCreate()" value="Kaydet" class="btn btn-primary px-4" />
                             </div>
                         </div>
                     </form>

@@ -6,19 +6,18 @@
 }
 
 <h1>Uyruk Listesi</h1>
+
 <p>
-    <a role="button" class="btn btn-primary" asp-action="Create">Yeni Uyruk Ekle</a>
+    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Uyruk Tanım</button>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 Uyruk Adı
-            </th>
-            <th>
-                Aktiflik Durumu
-            </th>
-            <th></th>
+            </th> 
+            <th>İşlemler</th>
         </tr>
     </thead>
     <tbody>
@@ -27,16 +26,11 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>
+                </td> 
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
+                    <button type="button" class="btn btn-warning" onclick="openEditModal(@item.NationalityId)">Düzenle</button>                     
+                    <button type="button" class="btn btn-danger" onclick="openDeleteModal(@item.NationalityId)">Sil</button>
                 </td>
-                <td>
-                    <button role="button" class="btn-warning" onclick="location.href='@Url.Action("Edit", "Nationality",new { Id = item.NationalityId } )'">Düzenle</button>
-                    <button class="btn-info" onclick="openDetailModal(@item.NationalityId)">Detay</button>
-                    <button class="btn-danger" onclick="openDeleteModal(@item.NationalityId)">Sil</button>
-                </td>
-
             </tr>
         }
     </tbody>
@@ -59,5 +53,5 @@
 
 
 @section Scripts{
-<script src="~/js/pages/nationalityModul.js" asp-append-version="true"></script>
+    <script src="~/js/pages/nationalityModul.js" asp-append-version="true"></script>
 }

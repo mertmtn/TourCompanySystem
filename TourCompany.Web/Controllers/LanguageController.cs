@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace TourCompany.Web.Controllers
 {
     public class LanguageController : Controller
     {
         private readonly ILanguageService _languageService;
+        private readonly INotyfService _notyf;
 
-        public LanguageController(ILanguageService languageService)
+        public LanguageController(ILanguageService languageService, INotyfService notyf)
         {
             _languageService = languageService;
+            _notyf = notyf;
         }
 
         [HttpGet]
@@ -23,62 +26,54 @@ namespace TourCompany.Web.Controllers
 
         public IActionResult Details(int? id)
         {
-            if (id == null) return NotFound();
-
-            Language language = _languageService.GetById(id.Value);
-
+            var language = _languageService.GetById(id.Value);
             return (language != null) ? PartialView("~/Views/Language/Partials/Detail.cshtml", language) : NotFound();
         }
-
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return PartialView("~/Views/Language/Partials/Create.cshtml");
         }
 
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(LanguageCreateOrEditViewModel languageViewModel)
         {
-
             var result = _languageService.Add(new Language()
             {
                 Name = languageViewModel.Name,
                 IsActive = languageViewModel.IsActive
             });
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
 
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Language/Partials/Create.cshtml", languageViewModel);
             }
 
-            return View(languageViewModel);
+            return Json(result);
         }
 
-
+        [HttpGet]
         public IActionResult Edit(int? id)
         {
-            if (id == null) return NotFound();
+            var language = _languageService.GetById(id.Value);
 
-            Language language = _languageService.GetById(id.Value);
-            if (language != null)
+            return (language != null) ? PartialView(new LanguageCreateOrEditViewModel()
             {
-                return View(new LanguageCreateOrEditViewModel()
-                {
-                    LanguageId = language.LanguageId,
-                    Name = language.Name,
-                    IsActive = language.IsActive
-                });
-            }
-            return NotFound();
+                LanguageId = language.LanguageId,
+                Name = language.Name,
+                IsActive = language.IsActive
+            }) : NotFound();
         }
 
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Edit(int id, LanguageCreateOrEditViewModel languageViewModel)
         {
             if (id != languageViewModel.LanguageId) return NotFound();
@@ -90,20 +85,22 @@ namespace TourCompany.Web.Controllers
                 IsActive = languageViewModel.IsActive
             });
 
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                return PartialView("~/Views/Language/Partials/Create.cshtml", languageViewModel);
             }
-            return View(languageViewModel);
+
+            return Json(result);
         }
 
-
         public IActionResult Delete(int? id)
-        {
-            if (id == null) return NotFound();
-            Language language = _languageService.GetById(id.Value);
+        { 
+            var language = _languageService.GetById(id.Value);
             return (language != null) ? PartialView("~/Views/Language/Partials/Delete.cshtml", language) : NotFound();
         }
 
@@ -112,8 +109,9 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Language language = _languageService.GetById(id);
+            var language = _languageService.GetById(id);
             _languageService.Delete(language);
+            _notyf.Success("Silme işlemi başarılıdır.");
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,8 +1,8 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
-using Entities.Concrete;
 using Business.Abstract;
 using TourCompany.Web.Models.ViewModels;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace TourCompany.Web.Controllers
 {
@@ -10,11 +10,13 @@ namespace TourCompany.Web.Controllers
     {
         private readonly ILanguageService _languageService;
         private readonly IGuideService _guideService;
+        private readonly INotyfService _notyf;
 
-        public GuideController(ILanguageService languageService, IGuideService guideService)
+        public GuideController(ILanguageService languageService, IGuideService guideService, INotyfService notyf)
         {
             _languageService = languageService;
             _guideService = guideService;
+            _notyf = notyf;
         }
 
         [HttpGet]
@@ -25,73 +27,69 @@ namespace TourCompany.Web.Controllers
 
         public IActionResult Details(int? id)
         {
-            if (id == null) return NotFound();
-            Guide guide = _guideService.GetById(id.Value);
-            return (guide != null) ? View(guide) : NotFound();
+            var guide = _guideService.GetById(id.Value);
+            return (guide != null) ? PartialView("~/Views/Guide/Partials/Detail.cshtml", guide) : NotFound();
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new GuideCreateOrEditViewModel { Languages = _languageService.GetAll() });
+            return PartialView("~/Views/Guide/Partials/Create.cshtml", new GuideCreateOrEditViewModel { Languages = _languageService.GetAll() });
         }
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(GuideCreateOrEditViewModel guideViewModel)
         {
-            Guide guide = new()
+
+            var result = _guideService.Add(new()
             {
                 IsActive = guideViewModel.IsActive,
                 Name = guideViewModel.Name,
                 Surname = guideViewModel.Surname,
                 PhoneNumber = guideViewModel.PhoneNumber,
                 Gender = guideViewModel.Gender
-            };
+            }, guideViewModel.SelectedLanguages);
 
-            var result = _guideService.Add(guide, guideViewModel.SelectedLanguages);
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
-
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                guideViewModel.Languages = _languageService.GetAll();
+                return PartialView("~/Views/Place/Partials/Create.cshtml", guideViewModel);
             }
-            guideViewModel.Languages = _languageService.GetAll();
-            return View(guideViewModel);
+
+            return Json(result);
         }
 
         public IActionResult Edit(int? id)
         {
-            if (id == null) return NotFound();
+            var guide = _guideService.GetById(id.Value);
 
-            Guide guide = _guideService.GetById(id.Value);
-
-            if (guide != null)
-            {
-                return View(new GuideCreateOrEditViewModel()
-                {
-                    Languages = _languageService.GetAll(),
-                    SelectedLanguages = guide.Languages.Select(x => x.LanguageId.ToString()).ToArray(),
-                    Gender = guide.Gender,
-                    PhoneNumber = guide.PhoneNumber,
-                    Name = guide.Name,
-                    Surname = guide.Surname,
-                    IsActive = guide.IsActive,
-                    GuideId = guide.GuideId
-                });
-            }
-            return NotFound();
+            return (guide != null) ?
+              PartialView(new GuideCreateOrEditViewModel()
+              {
+                  Languages = _languageService.GetAll(),
+                  SelectedLanguages = guide.Languages.Select(x => x.LanguageId.ToString()).ToArray(),
+                  Gender = guide.Gender,
+                  PhoneNumber = guide.PhoneNumber,
+                  Name = guide.Name,
+                  Surname = guide.Surname,
+                  IsActive = guide.IsActive,
+                  GuideId = guide.GuideId
+              }) :
+              NotFound();
         }
 
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Edit(int id, GuideCreateOrEditViewModel guideViewModel)
         {
-            if (id != guideViewModel.GuideId) return NotFound();
-
-            Guide guide = new()
+            var result = _guideService.Update(new()
             {
                 GuideId = guideViewModel.GuideId,
                 IsActive = guideViewModel.IsActive,
@@ -99,26 +97,26 @@ namespace TourCompany.Web.Controllers
                 Surname = guideViewModel.Surname,
                 PhoneNumber = guideViewModel.PhoneNumber,
                 Gender = guideViewModel.Gender
-            };
-            
-            var result = _guideService.Update(guide, guideViewModel.SelectedLanguages);
-            if (result.StatusCode == 200) return RedirectToAction(nameof(Index));
+            }, guideViewModel.SelectedLanguages);
 
-            foreach (var message in result.MessageList)
+            if (result.StatusCode == 400)
             {
-                ModelState.AddModelError(message.Key, message.Value);
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                }
+
+                guideViewModel.Languages = _languageService.GetAll();
+                return PartialView("~/Views/Place/Partials/Create.cshtml", guideViewModel);
             }
-            guideViewModel.Languages = _languageService.GetAll();
-            return View(guideViewModel);
+
+            return Json(result);
         }
 
 
         public IActionResult Delete(int? id)
         {
-            if (id == null) return NotFound();
-
-            Guide guide = _guideService.GetById(id.Value);
-
+            var guide = _guideService.GetById(id.Value);
             return (guide != null) ? View(guide) : NotFound();
         }
 
@@ -127,9 +125,10 @@ namespace TourCompany.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Guide guide = _guideService.GetById(id);
+            var guide = _guideService.GetById(id);
             _guideService.Delete(guide);
+            _notyf.Success("Silme işlemi başarılıdır.");
             return RedirectToAction(nameof(Index));
-        } 
+        }
     }
 }

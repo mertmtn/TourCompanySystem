@@ -8,7 +8,7 @@
 <h1>Turist Listesi</h1>
 
 <p>
-    <a role="button" class="btn btn-primary" asp-action="Create">Yeni Turist Tanım</a>
+    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Turist Tanımı</button>
 </p>
 <table class="table">
     <thead>
@@ -23,10 +23,8 @@
                 Ülke
             </th>
             <th>
-                Uyruk
-            </th>
-           
-            <th></th>
+                İşlemler
+            </th> 
         </tr>
     </thead>
     <tbody>
@@ -39,21 +37,37 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Surname)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.Country.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nationality.Name)
-                </td>
+                </td> 
 
                 <td>
-                    <a role="button" class="btn btn-success"  asp-action="Index" asp-controller="TourSelling" asp-route-id="@item.TouristId">Tur Satışı Yap</a> 
-                    <a role="button" class="btn btn-warning"  asp-action="Edit" asp-route-id="@item.TouristId">Güncelle</a> 
-                    <a role="button" class="btn btn-info"  asp-action="Details" asp-route-id="@item.TouristId">Detay</a> 
-                    <a role="button" class="btn btn-danger"  asp-action="Delete" asp-route-id="@item.TouristId">Sil</a>
+                    <a role="button" class="btn btn-success"  asp-action="Index" asp-controller="TourSelling" asp-route-id="@item.TouristId">Tur Satışı Yap</a>
+                    <button type="button" class="btn btn-warning" onclick="openEditModal(@item.TouristId)">Düzenle</button>
+                    <button type="button" class="btn btn-info" onclick="openDetailModal(@item.TouristId)">Detay</button>
+                    <button type="button" class="btn btn-danger" onclick="openDeleteModal(@item.TouristId)">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/pages/touristModul.js" asp-append-version="true"></script>
+}

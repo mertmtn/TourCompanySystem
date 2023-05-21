@@ -8,38 +8,37 @@
 <h1>Yabancı Dil Listesi</h1>
 
 <p>
-      <a role="button" class="btn btn-primary"   asp-action="Create">Yeni Dil Ekle</a>
+    <button type="button" class="btn btn-primary" onclick="openCreateModal()">Yeni Dil Ekle</button>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-               Yabancı Dil Adı
+                Yabancı Dil Adı
             </th>
-            <th>
-                Aktiflik Durumu
-            </th>
-            <th></th>
+            <th>İşlemler</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-                            <td>
-                    <button role="button" class="btn-warning" onclick="location.href='@Url.Action("Edit", "Language",new { Id = item.LanguageId } )'">Düzenle</button>
-                    <button class="btn-info" onclick="openDetailModal(@item.LanguageId)">Detay</button>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    <button role="button" class="btn-warning" onclick="openEditModal(@item.LanguageId)">Düzenle</button>
                     <button class="btn-danger" onclick="openDeleteModal(@item.LanguageId)">Sil</button>
-                </td>           
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -54,6 +53,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts{
-     <script src="~/js/pages/languageModul.js" asp-append-version="true"></script>
+    <script src="~/js/pages/languageModul.js" asp-append-version="true"></script>
 }
