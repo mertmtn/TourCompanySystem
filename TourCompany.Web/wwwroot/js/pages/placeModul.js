@@ -20,13 +20,13 @@ function submitForEdit() {
                 text: data.message,
                 duration: 1500,
                 close: true,
-                gravity: "top", // `top` or `bottom`
-                position: "left", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
                 style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    background: "linear-gradient(to right, #04AA6D, #04AA6D)",
                 },
-                callback: function () { window.location.href = "/Place" } // Callback after click
+                callback: function () { window.location.href = "/Place" }
             }).showToast();
         }
         else {
@@ -65,13 +65,13 @@ function submitForCreate() {
                 text: data.message,
                 duration: 1500,
                 close: true,
-                gravity: "top", // `top` or `bottom`
-                position: "left", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
                 style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    background: "linear-gradient(to right, #04AA6D, #04AA6D)",
                 },
-                callback: function () { window.location.href = "/Place" } // Callback after click
+                callback: function () { window.location.href = "/Place" }
             }).showToast();
         }
         else {

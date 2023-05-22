@@ -1,6 +1,9 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
+using Business.Constants.Messages;
+using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
@@ -18,11 +21,12 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("superadmin")]
+        [ValidationAspect(typeof(ClaimValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(OperationClaim claim)
         {
             _operationClaimDal.Add(claim);
-            return new SuccessResult("Ekleme başarılıdır.",200);
+            return new SuccessResult(UserMessage.ClaimAddedSuccessfully,200);
         }
 
         [SecuredOperation("superadmin")]

@@ -22,10 +22,7 @@ namespace Business.Concrete
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
-        }
-
-
-    
+        }    
        
         [ValidationAspect(typeof(LoginValidator), Priority = 1)]
         [ExceptionAspect(typeof(DataResult<User>))]

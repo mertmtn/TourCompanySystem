@@ -6,33 +6,45 @@ function submitForEdit() {
         MaidenName: $("#MaidenName").val(),
         Email: $("#Email").val(),
         Id: $("#Id").val(),
-        IsActive: $("#IsActive").prop('checked')      
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({
         type: "POST",
         url: "/User/Edit/",
         data: registerViewModel,
-
-
         encode: true,
     }).done(function (data) {
-        $("#staticBackdrop").modal('hide');
-        Toastify({
-            text: data.message,
-            duration: 1500,
-            close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "left", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-            },
-            callback: function () { window.location.href = "/User" } // Callback after click
-        }).showToast();
-
+        if (data.success) {
+            $("#staticBackdrop").modal('hide');
+            Toastify({
+                text: data.message,
+                duration: 1500,
+                close: true,
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: "linear-gradient(to right, #04AA6D, #04AA6D)",
+                },
+                callback: function () { window.location.href = "/User" }
+            }).showToast();
+        }
+        else {
+            $(".modal-body").html(data);
+            $(".modal-title").html("Kullanıcı Güncelleme");
+            $("#staticBackdrop").modal('show');
+        }
+    }).fail(function (jqXHR, textStatus) {
+        if (jqXHR.status === 400) {
+            console.log(jqXHR.responseText)
+        }
+        else if (jqXHR.status === 500) {
+            console.error(jqXHR.responseText)
+        }
     });
 }
+
 
 
 
@@ -45,7 +57,7 @@ function submitForCreate() {
         Email: $("#Email").val(),
         Id: $("#Id").val(),
         IsActive: $("#IsActive").prop('checked'),
-        Password: $("#Password").val()  
+        Password: $("#Password").val()
     };
 
     $.ajax({
@@ -60,13 +72,13 @@ function submitForCreate() {
                 text: data.message,
                 duration: 1500,
                 close: true,
-                gravity: "top", // `top` or `bottom`
-                position: "left", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
+                gravity: "bottom",
+                position: "right",
+                stopOnFocus: true,
                 style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    background: "linear-gradient(to right, #04AA6D, #04AA6D)",
                 },
-                callback: function () { window.location.href = "/User" } // Callback after click
+                callback: function () { window.location.href = "/User" }
             }).showToast();
         }
         else {
@@ -75,11 +87,11 @@ function submitForCreate() {
             $("#staticBackdrop").modal('show');
         }
     }).fail(function (jqXHR, textStatus) {
-        if (jqXHR.status===400) {
+        if (jqXHR.status === 400) {
             console.log(jqXHR.responseText)
-        }    
+        }
         else if (jqXHR.status === 500) {
             console.error(jqXHR.responseText)
-        }  
+        }
     });
 }

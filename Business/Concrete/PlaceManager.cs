@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
@@ -19,13 +20,12 @@ namespace Business.Concrete
             _placeDal = placeDal;
         }
 
-
         [ValidationAspect(typeof(PlaceValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Place place)
         {
             _placeDal.Add(place);
-            return new SuccessResult("Bölge başarıyla eklendi.", 200);
+            return new SuccessResult(PlaceMessage.PlaceAddedSuccessfully, 200);
         }
 
         public void Delete(Place place)
@@ -43,13 +43,12 @@ namespace Business.Concrete
             return _placeDal.Get(p => p.PlaceId == id);
         }
 
-
         [ValidationAspect(typeof(PlaceValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Update(Place place)
         {
             _placeDal.Update(place);
-            return new SuccessResult("Bölge başarıyla güncellendi.", 200);
+            return new SuccessResult(PlaceMessage.PlaceUpdatedPasswordSuccessfully, 200);
         }
     }
 }

@@ -77,7 +77,7 @@ namespace TourCompany.Web.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public JsonResult Edit(CountryCreateOrEditViewModel countryViewModel)
+        public IActionResult Edit(CountryCreateOrEditViewModel countryViewModel)
         {
             var result = _countryService.Update(new Country()
             {
@@ -86,7 +86,16 @@ namespace TourCompany.Web.Controllers
                 IsActive = countryViewModel.IsActive
             });
 
-            return Json(result);
+            if (result.StatusCode == 400)
+            {
+                foreach (var message in result.MessageList)
+                {
+                    ModelState.AddModelError(message.Key, message.Value);
+                } 
+
+                return PartialView("~/Views/Country/Partials/Edit.cshtml", countryViewModel);
+            }
+            return Json(result); 
         }
 
 

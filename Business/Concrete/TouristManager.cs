@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
@@ -22,8 +23,8 @@ namespace Business.Concrete
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Tourist country)
         {
-            _touristDal.Add(country); 
-            return new SuccessResult(200);
+            _touristDal.Add(country);
+            return new SuccessResult(TouristMessage.TouristAddedSuccessfully, 200);
         }
 
         public void Delete(Tourist country)
@@ -46,7 +47,7 @@ namespace Business.Concrete
         public IResult Update(Tourist tourist)
         {
             _touristDal.Update(tourist);
-            return new SuccessResult(200);
+            return new SuccessResult(TouristMessage.TouristUpdatedSuccessfully, 200);
         }
 
         public void UpdateForAddTours(int touristId, string[] selectedtours)

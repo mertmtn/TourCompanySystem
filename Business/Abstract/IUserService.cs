@@ -12,7 +12,6 @@ namespace Business.Abstract
         IDataResult<List<User>> GetAll();
         IResult Register(UserForRegisterDto userForRegisterDto);
         IResult UpdateUserInfo(User user);
-        IResult Delete(User user);        
         IDataResult<User> GetByMail(string email);
 
         IDataResult<List<OperationClaim>> GetClaims(User user);

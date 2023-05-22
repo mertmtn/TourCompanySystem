@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
@@ -18,7 +19,7 @@ namespace Business.Concrete
         public IResult UpdateClaimForUser(UserOperationClaim userOperationClaim, string[] selectedClaims)
         {
             _userOperationClaimDal.UpdateClaimForUser(userOperationClaim, selectedClaims);
-            return new SuccessResult("Kullanıcı rolleri güncellendi.");
+            return new SuccessResult(UserMessage.UserClaimUpdatedSuccessfully);
         }
     }
 }

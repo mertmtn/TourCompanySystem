@@ -6,6 +6,7 @@ using Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
 using Business.ValidationRules.FluentValidation;
+using Business.Constants.Messages;
 
 namespace Business.Concrete
 {
@@ -23,7 +24,7 @@ namespace Business.Concrete
         public IResult Add(Country country)
         {
             _countryDal.Add(country);
-            return new SuccessResult("Ülke başarıyla eklendi.", 200);
+            return new SuccessResult(CountryMessage.CountryAddedSuccessfully, 200);
         }
 
         public void Delete(Country country)
@@ -46,7 +47,7 @@ namespace Business.Concrete
         public IResult Update(Country country)
         {
             _countryDal.Update(country);
-            return new SuccessResult("Ülke başarıyla güncellendi.", 200);
+            return new SuccessResult(CountryMessage.CountryUpdatedSuccessfully, 200);
         }
     }
 }

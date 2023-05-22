@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
@@ -23,7 +24,7 @@ namespace Business.Concrete
         public IResult Add(Guide guide, string[] selectedLanguages)
         {
             _guideDal.AddManyLanguages(guide, selectedLanguages);
-            return new SuccessResult(200);
+            return new SuccessResult(GuideMessage.GuideAddedSuccessfully, 200);
         }
 
         public void Delete(Guide guide)
@@ -46,7 +47,7 @@ namespace Business.Concrete
         public IResult Update(Guide guide, string[] selectedLanguages)
         {
             _guideDal.UpdateManyLanguages(guide, selectedLanguages);
-            return new SuccessResult(200);
+            return new SuccessResult(GuideMessage.GuideUpdatedSuccessfully, 200);
         }
     }
 }

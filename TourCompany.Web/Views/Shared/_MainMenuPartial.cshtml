@@ -1,0 +1,20 @@
+﻿@{
+    string claim = @Context.Session.GetString("UserClaim") ?? "";
+
+    if (claim == "superadmin")
+    {
+        @await Html.PartialAsync("_SuperAdminMenuPartial")
+    }
+    else if (claim == "guideadmin")
+    {
+        @await Html.PartialAsync("_GuideMenuPartial")
+    }
+    else if (claim == "salesperson")
+    {
+        @await Html.PartialAsync("_SalesPersonMenuPartial")
+    }
+    else
+    {
+        @await Html.PartialAsync("_UndefinedMenuPartial")
+    }
+}  

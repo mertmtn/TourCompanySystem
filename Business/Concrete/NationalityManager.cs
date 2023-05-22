@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
@@ -23,7 +24,7 @@ namespace Business.Concrete
         public IResult Add(Nationality nationality)
         {
             _nationalityDal.Add(nationality);
-            return new SuccessResult(200);
+            return new SuccessResult(NationalityMessage.NationalityAddedSuccessfully, 200);
         }
 
         public void Delete(Nationality nationality)
@@ -46,7 +47,7 @@ namespace Business.Concrete
         public IResult Update(Nationality nationality)
         {
             _nationalityDal.Update(nationality);
-            return new SuccessResult(200);
+            return new SuccessResult(NationalityMessage.NationalityUpdatedSuccessfully, 200);
         }
     }
 }

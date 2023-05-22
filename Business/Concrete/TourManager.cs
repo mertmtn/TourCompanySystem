@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
@@ -23,7 +24,7 @@ namespace Business.Concrete
         public IResult Add(Tour tour, string[] selectedPlaces)
         {
             _tourDal.AddManyPlaces(tour, selectedPlaces);
-            return new SuccessResult(200);
+            return new SuccessResult(TourMessage.TourAddedSuccessfully, 200);
         }
 
         public void Delete(Tour tour)
@@ -46,7 +47,7 @@ namespace Business.Concrete
         public IResult Update(Tour tour, string[] selectedPlaces)
         {
             _tourDal.UpdateManyPlaces(tour, selectedPlaces);
-            return new SuccessResult(200);
+            return new SuccessResult(TourMessage.TourUpdatedSuccessfully, 200);
         }
     }
 }

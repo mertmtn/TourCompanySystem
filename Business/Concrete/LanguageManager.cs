@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
 using Core.Aspects.Autofac.Validation;
@@ -23,7 +24,7 @@ namespace Business.Concrete
         public IResult Add(Language language)
         {
             _languageDal.Add(language);
-            return new SuccessResult(200);
+            return new SuccessResult(LanguageMessage.LanguageAddedSuccessfully, 200);
         }
 
         public void Delete(Language language)
@@ -46,7 +47,7 @@ namespace Business.Concrete
         public IResult Update(Language language)
         {
             _languageDal.Update(language);
-            return new SuccessResult(200);
+            return new SuccessResult(LanguageMessage.LanguageUpdatedSuccessfully, 200);
         }
     }
 }

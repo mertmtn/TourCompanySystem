@@ -47,12 +47,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(_userDal.Get(u => u.EMail == email));
         }
 
-        public IResult Delete(User user)
-        {
-            _userDal.Delete(user);
-            return new SuccessResult("UserMessage.UserDeletedSuccessfully");
-        }
-
+ 
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
@@ -68,7 +63,7 @@ namespace Business.Concrete
         public IResult UpdateUserInfo(User user)
         {
             _userDal.UpdateUserInfo(user);
-            return new SuccessResult("");
+            return new SuccessResult(UserMessage.UserUpdatedInfoSuccessfully);
         }
 
         public IResult UserExists(string email)
