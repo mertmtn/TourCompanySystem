@@ -1,4 +1,4 @@
-﻿@model TourCompany.Web.Models.ViewModels.TourCreateOrEditViewModel
+@model TourCompany.Web.Models.ViewModels.TourCreateOrEditViewModel
  
 <div class="container">
  
@@ -100,9 +100,8 @@
     </div>
 </div>
 
-
 <script>
-     $(document).ready(function() {
-      $('.my-select').selectpicker();
+    $(document).ajaxComplete(function () {
+        $('.selectpicker').selectpicker();
     });
 </script>

@@ -4,7 +4,7 @@ function submitForEdit() {
         Name: $("#Name").val(),
         LanguageId: $("#LanguageId").val(),
         Price: $("#Price").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({
@@ -42,7 +42,7 @@ function submitForCreate() {
     var languageViewModel = {
         Name: $("#Name").val(),
         Price: $("#Price").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({

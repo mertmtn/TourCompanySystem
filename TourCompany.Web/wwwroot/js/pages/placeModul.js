@@ -5,7 +5,7 @@ function submitForEdit() {
         Name: $("#Name").val(),
         PlaceId: $("#PlaceId").val(),
         Price: $("#Price").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({
@@ -50,7 +50,7 @@ function submitForCreate() {
     var placeViewModel = {
         Name: $("#Name").val(),
         Price: $("#Price").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({

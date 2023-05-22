@@ -33,9 +33,9 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openModal('/Guide/Edit/@item.GuideId','')">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/Guide/Detail/@item.GuideId','')">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openModal('/Guide/Delete/@item.GuideId','')">Sil</button>
+                    <button type="button" class="btn btn-warning" onclick="openModal('/Guide/Edit/@item.GuideId','Rehber Düzenle')">Düzenle</button>
+                    <button type="button" class="btn btn-info" onclick="openModal('/Guide/Detail/@item.GuideId','Rehber Detay')">Detay</button>
+                    <button type="button" class="btn btn-danger" onclick="openModal('/Guide/Delete/@item.GuideId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
                 </td>
             </tr>
         }

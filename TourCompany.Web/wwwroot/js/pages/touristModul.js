@@ -7,7 +7,7 @@ function submitForEdit() {
         CountryId: $("#CountryId").val(),
         NationalityId: $("#NationalityId").val(),
         Surname: $("#Surname").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({
@@ -42,7 +42,7 @@ function submitForCreate() {
         CountryId: $("#CountryId").val(),
         NationalityId: $("#NationalityId").val(),
         Surname: $("#Surname").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({

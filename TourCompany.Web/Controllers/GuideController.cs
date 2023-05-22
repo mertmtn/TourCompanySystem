@@ -39,7 +39,7 @@ namespace TourCompany.Web.Controllers
         public IActionResult Create()
         {
             return PartialView("~/Views/Guide/Partials/Create.cshtml", new GuideCreateOrEditViewModel { Languages = _languageService.GetAll() });
-        }
+        } 
 
 
         [HttpPost]

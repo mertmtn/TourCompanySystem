@@ -57,7 +57,7 @@
             {
                 <tr>
                     <td>
-                        <button role="button"   onclick="openModal('/Tours/Detail/@item.Tour.TourId',' Tur Detayı')" >@item.Tour.Name  </button>
+                        <button role="button" class="btn btn-outline-info"  onclick="openModal('/Tours/Detail/@item.Tour.TourId',' Tur Detayı')" >@item.Tour.Name  </button>
                     </td>
 
                     <td>
@@ -72,6 +72,8 @@
         </tbody>
     </table>
 </div>
+@await Html.PartialAsync("_CommonModalPartial")
+
 @section Scripts{
     <script src="~/js/pages/commonModul.js" asp-append-version="true"></script> 
 }

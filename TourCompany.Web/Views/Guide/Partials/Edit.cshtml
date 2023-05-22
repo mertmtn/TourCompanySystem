@@ -1,64 +1,113 @@
 ﻿@model TourCompany.Web.Models.ViewModels.GuideCreateOrEditViewModel
-
 <div class="container">
+
     <div class="row">
-        <div class="card">
-            <div class="card-body">
-                <form>
-                    <input type="hidden" asp-for="GuideId" />
-                    <div class="form-group">
-                        <label class="control-label">Adı</label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <input type="hidden" asp-for="GuideId" />
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Adı</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Soyadı</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="Surname" class="form-control" />
+                                <span asp-validation-for="Surname" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Cinsiyet</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <select asp-for="Gender" class="selectpicker">
+                                    <option value="K">Kadın</option>
+                                    <option value="E">Erkek</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Telefon Numarası</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="PhoneNumber" class="form-control" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Aktif Mi?</h6>
+                            </div><div class="col-sm-9 text-secondary">
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="IsActive" />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Yabancı Dil Bilgisi</h6>
+                            </div><div class="col-sm-9 text-secondary">
+                                <select asp-for="SelectedLanguages" class="selectpicker" multiple data-live-search="true">
+                                    @if (Model != null && Model.Languages.Count > 0)
+                                    {
+                                        foreach (var language in Model.Languages)
+                                        {
+                                            <option value="@language.LanguageId">@language.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="button" value="Güncelle" onclick="submitForEdit()" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Soyadı</label>
-                        <input asp-for="Surname" class="form-control" />
-                        <span asp-validation-for="Surname" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Cinsiyeti</label>
-                        <select asp-for="Gender" class="selectpicker">
-                            <option value="K">Kadın</option>
-                            <option value="E">Erkek</option>
-                        </select>
-                        <span asp-validation-for="Gender" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Telefon Numarası</label>
-                        <input asp-for="PhoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                    <div class="form-group form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" asp-for="IsActive" /> <label class="control-label">Aktif Mi</label>
-                        </label>
-                    </div>
-                    <label class="control-label">Bilinen Diller</label>
-                    <select asp-for="SelectedLanguages" class="selectpicker" multiple data-live-search="true">
-                        @if (Model != null && Model.Languages.Count > 0)
-                        {
-                            foreach (var language in Model.Languages)
-                            {
-                                <option value="@language.LanguageId" selected=@(Model.SelectedLanguages.Contains(language.LanguageId.ToString()))>@language.Name</option>
-                            }
-                        }
-                    </select>
-                    <div class="form-group">
-                        <input type="button" value="Güncelle" onclick="submitForEdit()" class="btn btn-primary" />
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col-md-4">
-                    </div>
+
+
+
                 </div>
             </div>
+
         </div>
     </div>
+
 </div>
+
+
+ 
 <script>
     $(document).ajaxComplete(function () {
         $('.selectpicker').selectpicker();
     });
 </script>
+
 

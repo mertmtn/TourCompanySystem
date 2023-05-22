@@ -6,7 +6,7 @@ function submitForEdit() {
         MaidenName: $("#MaidenName").val(),
         Email: $("#Email").val(),
         Id: $("#Id").val(),
-        IsActive: $("#IsActive").val()      
+        IsActive: $("#IsActive").prop('checked')      
     };
 
     $.ajax({
@@ -44,7 +44,7 @@ function submitForCreate() {
         MaidenName: $("#MaidenName").val(),
         Email: $("#Email").val(),
         Id: $("#Id").val(),
-        IsActive: $("#IsActive").val(),
+        IsActive: $("#IsActive").prop('checked'),
         Password: $("#Password").val()  
     };
 

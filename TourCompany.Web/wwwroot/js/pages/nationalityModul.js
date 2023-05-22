@@ -4,7 +4,7 @@ function submitForEdit() {
         Name: $("#Name").val(),
         NationalityId: $("#NationalityId").val(),
         Price: $("#Price").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({
@@ -42,7 +42,7 @@ function submitForCreate() {
     var nationalityViewModel = {
         Name: $("#Name").val(),
         Price: $("#Price").val(),
-        IsActive: $("#IsActive").val()
+        IsActive: $("#IsActive").prop('checked')
     };
 
     $.ajax({
