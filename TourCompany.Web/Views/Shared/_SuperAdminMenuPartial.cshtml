@@ -1,18 +1,17 @@
-﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+﻿ 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tour Company</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <ul class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            <ul class="navbar-nav flex-grow-1">
-
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Bölge İşlemleri
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" asp-area="" asp-controller="Place" asp-action="Index">Bölgeler</a></li>
                     </ul>
                 </li>
@@ -67,16 +66,19 @@
                         <li><a class="dropdown-item" asp-area="" asp-controller="Nationality" asp-action="Index">Uyruklar</a></li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false"> @Context.Session.GetString("Name") </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                        <li><a href="#" class="dropdown-item">Profil</a></li>
 
-                        <li><a href="@Url.Action("Logout","Account")" class="dropdown-item">Çıkış</a></li>
-                    </ul>
-                </li>
+               
             </ul>
-        </ul>
-    </div>
+        </div>
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false"> @Context.Session.GetString("Name") </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                <li><a href="#" class="dropdown-item">Profil</a></li>
 
+                <li><a href="@Url.Action("Logout","Account")" class="dropdown-item">Çıkış</a></li>
+            </ul>
+        </div>
+    </div>
 </nav>
+
+ 

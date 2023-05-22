@@ -13,4 +13,13 @@ namespace Business.ValidationRules.FluentValidation
                 Matches(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").WithMessage(@"Geçerli bir mail adresi giriniz.");
         }
     }
+
+    public class LoginValidator : AbstractValidator<UserForLoginDto>
+    {
+        public LoginValidator()
+        {
+            RuleFor(x => x.Password).NotNull().WithMessage("Parolayı giriniz.");
+            RuleFor(x => x.Email).NotNull().WithMessage("E-Posta giriniz");
+        }
+    }
 }

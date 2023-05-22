@@ -1,4 +1,4 @@
-﻿@model Entities.DTO.UserForLoginDto
+﻿@model TourCompany.Web.Models.ViewModels.LoginViewModel
 
 @{
     Layout = null;
@@ -12,6 +12,10 @@
 <body>
     <section class="vh-100">
         <div class="container py-5 h-100">
+            <div class="text-md-center">
+                <h1>TOUR COMPANY</h1>
+                <h4>Content Management System</h4>
+            </div>
             <div class="row d-flex align-items-center justify-content-center h-100">
                 <div class="col-md-8 col-lg-7 col-xl-6">
                     <img src="~/images/istanbul.jpg" class="img-fluid" alt="Phone image" />
@@ -20,12 +24,12 @@
                     <form asp-action="Login">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Email" class="control-label"></label>
+                            <label class="control-label"> E-Mail</label>
                             <input asp-for="Email" class="form-control form-control-lg" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Password" class="control-label"></label>
+                            <label class="control-label">Parola</label>
                             <input asp-for="Password" class="form-control" type="password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
@@ -34,7 +38,7 @@
                             <input type="submit" value="Giriş Yap" class="btn btn-primary" />
                         </div>
                     </form>
-  
+
                 </div>
             </div>
         </div>

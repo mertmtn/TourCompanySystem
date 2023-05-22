@@ -12,7 +12,7 @@
 
 </head>
 <body>
-    <header>
+    
         @{
             string claim = @Context.Session.GetString("UserClaim")??"";
 
@@ -33,7 +33,7 @@
                 @await Html.PartialAsync("_UndefinedMenuPartial")
             }
         }
-    </header>
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -42,7 +42,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - TourCompany.Web
+            &copy; @DateTime.Now.Year - TourCompany.Web
         </div>
     </footer>
 

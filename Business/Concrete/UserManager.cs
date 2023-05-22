@@ -26,13 +26,12 @@ namespace Business.Concrete
         [ExceptionAspect(typeof(Result))]
         public IResult Register(UserForRegisterDto userForRegisterDto)
         {
-            byte[] passwordHash, passwordSalt;
-            HashingHelper.CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
+            HashingHelper.CreatePasswordHash(userForRegisterDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = new User
             {
                 EMail = userForRegisterDto.Email,
                 FirstName = userForRegisterDto.FirstName,
-
+                MaidenName = userForRegisterDto.MaidenName,
                 LastName = userForRegisterDto.LastName,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
@@ -46,7 +45,7 @@ namespace Business.Concrete
         public IDataResult<User> GetByMail(string email)
         {
             return new SuccessDataResult<User>(_userDal.Get(u => u.EMail == email));
-        }       
+        }
 
         public IResult Delete(User user)
         {
@@ -79,7 +78,7 @@ namespace Business.Concrete
                 return new ErrorResult(UserMessage.UserAlreadyExists);
             }
             return new SuccessResult();
-        }      
+        }
 
         public IDataResult<List<OperationClaim>> GetClaims(User user)
         {

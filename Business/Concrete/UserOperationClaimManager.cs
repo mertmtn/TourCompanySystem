@@ -3,7 +3,6 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
 using DataAccess.Abstract;
-using Entities.Concrete;
 
 namespace Business.Concrete
 {

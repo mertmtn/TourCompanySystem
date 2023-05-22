@@ -57,7 +57,7 @@
             {
                 <tr>
                     <td>
-                        <a  asp-controller="Tours" asp-action="Detail" asp-route-id="@item.Tour.TourId">@item.Tour.Name  </a>     
+                        <button role="button"   onclick="openModal('/Tours/Detail/@item.Tour.TourId',' Tur Detayı')" >@item.Tour.Name  </button>
                     </td>
 
                     <td>
@@ -72,3 +72,6 @@
         </tbody>
     </table>
 </div>
+@section Scripts{
+    <script src="~/js/pages/commonModul.js" asp-append-version="true"></script> 
+}

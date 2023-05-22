@@ -1,8 +1,9 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Business.Abstract;
+using Business.Abstract; 
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TourCompany.Web.Models.ViewModels;
 
 namespace TourCompany.Web.Controllers
 {
@@ -22,18 +23,32 @@ namespace TourCompany.Web.Controllers
 
         public ActionResult Login()
         {
-            return View(new UserForLoginDto());
+            return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(UserForLoginDto userForLoginDto)
+        public async Task<ActionResult> Login(LoginViewModel userForLoginDto)
         {
-            var userToLogin = _authService.Login(userForLoginDto);
+            var userToLogin = _authService.LoginUser(new UserForLoginDto
+            {
+                Password = userForLoginDto.Password,
+                Email = userForLoginDto.Email
+            });             
+
             if (!userToLogin.Success)
             {
+                if (userToLogin.StatusCode == 400)
+                {
+                    foreach (var message in userToLogin.MessageList)
+                    {
+                        ModelState.AddModelError(message.Key, message.Value);
+                    }
+                    return View(userForLoginDto);
+                }
                 _notyf.Error(userToLogin.Message);
                 return View(userForLoginDto);
             }
+
             var tokenResult = _authService.CreateAccessToken(userToLogin.Data);
             if (tokenResult.Success)
             {
@@ -47,7 +62,6 @@ namespace TourCompany.Web.Controllers
             }
             return View(userForLoginDto);
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Logout()

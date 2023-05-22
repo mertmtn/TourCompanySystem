@@ -116,11 +116,11 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         }
         else if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
         {
-            context.Response.Redirect("/Error/404");
+            context.Response.Redirect("/Error/Error404");
         }
         else
         {
-            context.Response.Redirect("/Error/500");
+            context.Response.Redirect("/Error/Error500");
         }
     });
 });

@@ -7,6 +7,9 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JsonWebToken;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Exception;
+using Core.Aspects.Autofac.Validation;
 
 namespace Business.Concrete
 {
@@ -19,9 +22,14 @@ namespace Business.Concrete
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
-        }       
+        }
 
-        public IDataResult<User> Login(UserForLoginDto userForLoginDto)
+
+    
+       
+        [ValidationAspect(typeof(LoginValidator), Priority = 1)]
+        [ExceptionAspect(typeof(DataResult<User>))]
+        public IDataResult<User> LoginUser(UserForLoginDto userForLoginDto)
         {
             var userToCheck = _userService.GetByMail(userForLoginDto.Email).Data;
             if (userToCheck == null)
