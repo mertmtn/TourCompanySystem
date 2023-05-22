@@ -1,15 +1,17 @@
 ﻿@model IEnumerable<Entities.Concrete.Tour>
 
 @{
-    ViewData["Title"] = "Tur Listesi | Tour Company";
+    ViewData["Title"] = "Tur Listesi | Tour-Ist Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Tur Listesi</h1>
-
-<p>
-    <button type="button" class="btn btn-primary" onclick="openModal('/Tours/Create','Yeni Tur Tanımı')">Yeni Tur Tanımı</button>
-</p>
+@if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+{
+    <p>
+        <button type="button" class="btn btn-primary" onclick="openModal('/Tours/Create','Yeni Tur Tanımı')">Yeni Tur Tanımı</button>
+    </p>
+}
 
 <table class="table">
     <thead>
@@ -35,19 +37,26 @@
                     @Html.DisplayFor(modelItem => item.TourDate)
                 </td>
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openModal('/Tours/Edit/@item.TourId','Tur Güncelle')">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/Tours/Detail/@item.TourId','Tur Detayı')">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openModal('/Tours/Delete/@item.TourId','Turu Sil')">Sil</button>
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate") || User.IsInRole("guideuser"))
+                    {
+                        <button type="button" class="btn btn-info" onclick="openModal('/Tours/Detail/@item.TourId','Tur Detayı')">Detay</button>
+                    }
+
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+                    {
+                        <button type="button" class="btn btn-warning" onclick="openModal('/Tours/Edit/@item.TourId','Tur Güncelle')">Düzenle</button>
+                        <button type="button" class="btn btn-danger" onclick="openModal('/Tours/Delete/@item.TourId','Turu Sil')">Sil</button>
+                    }
                 </td>
             </tr>
         }
     </tbody>
-</table> 
+</table>
 
 @await Html.PartialAsync("_CommonModalPartial")
 
 @section Scripts{
     <script src="~/js/pages/commonModul.js" asp-append-version="true"></script>
     <script src="~/js/pages/tourModul.js" asp-append-version="true"></script>
-  
+
 }

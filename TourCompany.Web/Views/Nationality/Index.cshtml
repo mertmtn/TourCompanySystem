@@ -1,23 +1,29 @@
 ﻿@model IEnumerable<Entities.Concrete.Nationality>
 
 @{
-    ViewData["Title"] = "Uyruk Listesi | Tour Company";
+    ViewData["Title"] = "Uyruk Listesi | Tour-Ist Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Uyruk Listesi</h1>
+@if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+{
+    <p>
+        <button type="button" class="btn btn-primary" onclick="openModal('/Nationality/Create/','Yeni Uyruk Tanımı')">Yeni Uyruk Tanım</button>
+    </p>
+}
 
-<p>
-    <button type="button" class="btn btn-primary" onclick="openModal('/Nationality/Create/','Yeni Uyruk Tanımı')">Yeni Uyruk Tanım</button>
-</p>
 
 <table class="table">
     <thead>
         <tr>
             <th>
                 Uyruk Adı
-            </th> 
-            <th>İşlemler</th>
+            </th>
+            @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+            {
+                <th>İşlemler</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -26,10 +32,13 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td> 
+                </td>
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openModal('/Nationality/Edit/@item.NationalityId','Uyruk Güncelle')">Düzenle</button>
-                    <button type="button" class="btn btn-danger" onclick="openModal('/Nationality/Delete/@item.NationalityId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+                    {
+                        <button type="button" class="btn btn-warning" onclick="openModal('/Nationality/Edit/@item.NationalityId','Uyruk Güncelle')">Düzenle</button>
+                        <button type="button" class="btn btn-danger" onclick="openModal('/Nationality/Delete/@item.NationalityId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
+                    }
                 </td>
             </tr>
         }

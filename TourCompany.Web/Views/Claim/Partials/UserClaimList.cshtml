@@ -5,6 +5,7 @@
         <div class="card">
             <div class="card-body">
                 <form>
+                    @Html.AntiForgeryToken()
                     <input type="hidden" asp-for="UserId" />  
                     <select asp-for="SelectedClaims" class="selectpicker" multiple data-live-search="true">
                         @if (Model != null && Model.Claims.Count > 0)

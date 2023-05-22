@@ -1,5 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Business.Abstract; 
+using Business.Abstract;
 using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +27,14 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel userForLoginDto)
         {
             var userToLogin = _authService.LoginUser(new UserForLoginDto
             {
                 Password = userForLoginDto.Password,
                 Email = userForLoginDto.Email
-            });             
+            });
 
             if (!userToLogin.Success)
             {
@@ -56,7 +57,7 @@ namespace TourCompany.Web.Controllers
                 HttpContext.Session.SetString("JWToken", tokenResult.Data.Token);
                 HttpContext.Session.SetString("Name", $"{userToLogin.Data.FirstName} {userToLogin.Data.LastName}");
                 HttpContext.Session.SetString("UserId", userToLogin.Data.Id.ToString());
-                HttpContext.Session.SetString("UserClaim", claims != null && claims.Count > 0 ? claims.FirstOrDefault().Name : "");
+                HttpContext.Session.SetString("UserClaim", (claims != null && claims.Count > 0) ? string.Join(",", claims.Select(x => x.Name).ToArray()) : "");
 
                 return RedirectToAction("Index", "Home");
             }

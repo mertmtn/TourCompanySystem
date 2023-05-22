@@ -20,7 +20,7 @@ namespace Business.Concrete
             _operationClaimDal = operationClaimDal;
         }
 
-        [SecuredOperation("superadmin")]
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(ClaimValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(OperationClaim claim)
@@ -29,13 +29,13 @@ namespace Business.Concrete
             return new SuccessResult(UserMessage.ClaimAddedSuccessfully,200);
         }
 
-        [SecuredOperation("superadmin")]
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public IDataResult<List<OperationClaim>> GetAll()
         {
             return new SuccessDataResult<List<OperationClaim>>(_operationClaimDal.GetAll());
         }
 
-        [SecuredOperation("superadmin")]
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public IDataResult<OperationClaim> GetById(int claimId)
         {
             return new SuccessDataResult<OperationClaim>(_operationClaimDal.Get(c => c.Id == claimId));

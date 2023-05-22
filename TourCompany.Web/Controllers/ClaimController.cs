@@ -1,6 +1,4 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspects.Autofac;
-using Entities.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +28,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(ClaimCreateViewModel claimViewModel)
         {
             var result = _operationClaimService.Add(new ()

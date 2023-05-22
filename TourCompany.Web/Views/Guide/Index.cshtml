@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<Entities.Concrete.Guide>
-
 @{
-    ViewData["Title"] = "Rehber Listesi | Tour Company";
+    ViewData["Title"] = "Rehber Listesi | Tour-Ist Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <h1>Rehber Listesi</h1>
 
-<p>
-    <button type="button" class="btn btn-primary" onclick="openModal('/Guide/Create/','Yeni Rehber Tanım')">Yeni Rehber Tanımla</button>
-</p>
+@if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("guide.editorupdate"))
+{
+    <p>
+        <button type="button" class="btn btn-primary" onclick="openModal('/Guide/Create/','Yeni Rehber Tanım')">Yeni Rehber Tanımla</button>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -33,9 +37,16 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    <button type="button" class="btn btn-warning" onclick="openModal('/Guide/Edit/@item.GuideId','Rehber Düzenle')">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/Guide/Detail/@item.GuideId','Rehber Detay')">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openModal('/Guide/Delete/@item.GuideId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("guide.editorupdate") || User.IsInRole("guideuser"))
+                    {
+                        <button type="button" class="btn btn-info" onclick="openModal('/Guide/Detail/@item.GuideId','Rehber Detay')">Detay</button>
+                    }
+                    
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("guide.editorupdate"))
+                    {
+                        <button type="button" class="btn btn-warning" onclick="openModal('/Guide/Edit/@item.GuideId','Rehber Düzenle')">Düzenle</button>
+                        <button type="button" class="btn btn-danger" onclick="openModal('/Guide/Delete/@item.GuideId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
+                    }
                 </td>
             </tr>
         }

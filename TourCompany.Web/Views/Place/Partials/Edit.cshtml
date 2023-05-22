@@ -7,7 +7,7 @@
                 <form>
                     <input type="hidden" asp-for="PlaceId" />
                     <div class="row mb-3">
-
+                        @Html.AntiForgeryToken()
                         <div class="col-sm-3">
                             <h6 class="mb-0">Bölge Adı</h6>
                         </div>

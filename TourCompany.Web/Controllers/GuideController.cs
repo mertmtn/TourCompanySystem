@@ -43,7 +43,7 @@ namespace TourCompany.Web.Controllers
 
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(GuideCreateOrEditViewModel guideViewModel)
         {
 
@@ -90,7 +90,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, GuideCreateOrEditViewModel guideViewModel)
         {
             var result = _guideService.Update(new()

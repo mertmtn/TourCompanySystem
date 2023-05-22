@@ -36,6 +36,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(UserCreateOrEditViewModel registerViewModel)
         {
             var userExists = _userService.UserExists(registerViewModel.Email);
@@ -85,7 +86,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public JsonResult Edit(UserCreateOrEditViewModel registerViewModel)
         {
             var result = _userService.UpdateUserInfo(new()
@@ -129,6 +130,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult UpdateClaimForUser(UserOperationClaimCreateOrUpdateViewModel userOperationClaimCreateOrUpdateViewModel)
         {
             var result = _userOperationClaimService.UpdateClaimForUser(new Core.Entities.Concrete.UserOperationClaim() { UserId = userOperationClaimCreateOrUpdateViewModel.UserId },

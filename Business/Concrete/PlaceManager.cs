@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
@@ -20,6 +21,7 @@ namespace Business.Concrete
             _placeDal = placeDal;
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         [ValidationAspect(typeof(PlaceValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Place place)
@@ -28,21 +30,25 @@ namespace Business.Concrete
             return new SuccessResult(PlaceMessage.PlaceAddedSuccessfully, 200);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         public void Delete(Place place)
         {
             _placeDal.Delete(place);
-        } 
-        
+        }
+
+      
         public List<Place> GetAll(Expression<Func<Place, bool>> filter = null)
         {
             return _placeDal.GetAll(filter);
         }
 
+       
         public Place GetById(int id)
         {
             return _placeDal.Get(p => p.PlaceId == id);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         [ValidationAspect(typeof(PlaceValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Update(Place place)

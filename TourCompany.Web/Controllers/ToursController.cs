@@ -46,7 +46,7 @@ namespace TourCompany.Web.Controllers
 
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(TourCreateOrEditViewModel tourViewModel)
         {
             var result = _tourService.Add(new()
@@ -94,7 +94,7 @@ namespace TourCompany.Web.Controllers
 
 
         [HttpPost]
-        // [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, TourCreateOrEditViewModel tourViewModel)
         {
             var result = _tourService.Update(new()

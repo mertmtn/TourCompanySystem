@@ -40,7 +40,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(PlaceCreateOrEditViewModel placeViewModel)
         {  
             var result = _placeService.Add(new()
@@ -78,7 +78,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(PlaceCreateOrEditViewModel placeViewModel)
         { 
             var result = _placeService.Update(new()

@@ -8,6 +8,7 @@ function submitForEdit() {
         SelectedPlaces: $("#SelectedPlaces").val(),
         TourDate: $("#TourDate").val(),
         GuideId: $("#GuideId").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -56,6 +57,7 @@ function submitForCreate() {
         SelectedPlaces: $("#SelectedPlaces").val(),
         TourDate: $("#TourDate").val(),
         GuideId: $("#GuideId").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
     $.ajax({
         type: "POST",

@@ -6,10 +6,11 @@ using TourCompany.Web.Models.ViewModels;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Business.BusinessAspects.Autofac;
 
 namespace TourCompany.Web.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]   
     public class CountryController : Controller
     {
         private readonly ICountryService _countryService;
@@ -41,7 +42,7 @@ namespace TourCompany.Web.Controllers
 
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CountryCreateOrEditViewModel countryViewModel)
         {
             var result = _countryService.Add(new Country()
@@ -76,7 +77,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(CountryCreateOrEditViewModel countryViewModel)
         {
             var result = _countryService.Update(new Country()

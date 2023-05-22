@@ -6,7 +6,8 @@ function submitForEdit() {
         MaidenName: $("#MaidenName").val(),
         Email: $("#Email").val(),
         Id: $("#Id").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -45,9 +46,6 @@ function submitForEdit() {
     });
 }
 
-
-
-
 function submitForCreate() {
 
     var registerViewModel = {
@@ -57,6 +55,7 @@ function submitForCreate() {
         Email: $("#Email").val(),
         Id: $("#Id").val(),
         IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
         Password: $("#Password").val()
     };
 

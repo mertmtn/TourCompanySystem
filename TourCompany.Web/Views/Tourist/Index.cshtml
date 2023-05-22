@@ -1,27 +1,30 @@
 ﻿@model IEnumerable<Entities.Concrete.Tourist>
 
 @{
-    ViewData["Title"] = "Turist Listesi | Tour Company";
+    ViewData["Title"] = "Turist Listesi | Tour-Ist Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Turist Listesi</h1>
+@if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+{
+    <p>
+        <button type="button" class="btn btn-primary" onclick="openModal('/Tourist/Create','Yeni Turist Tanımı')">Yeni Turist Tanımı</button>
+    </p>
+}
 
-<p>
-    <button type="button" class="btn btn-primary" onclick="openModal('/Tourist/Create','Yeni Turist Tanımı')">Yeni Turist Tanımı</button>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 Ad Soyad
-            </th>            
+            </th>
             <th>
                 Ülke
-            </th> 
+            </th>
             <th>
                 İşlemler
-            </th> 
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -30,15 +33,25 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)   @Html.DisplayFor(modelItem => item.Surname)
-                </td> 
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Country.Name)
                 </td>
                 <td>
-                    <a role="button" class="btn btn-success"  asp-action="Index" asp-controller="TourSelling" asp-route-id="@item.TouristId">Tur Satışı Yap</a>
-                    <button type="button" class="btn btn-warning" onclick="openModal('/Tourist/Edit/@item.TouristId','Turist Güncelle')">Düzenle</button>
-                    <button type="button" class="btn btn-info" onclick="openModal('/Tourist/Detail/@item.TouristId','Turist Detayı')">Detay</button>
-                    <button type="button" class="btn btn-danger" onclick="openModal('/Tourist/Delete/@item.TouristId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate") || User.IsInRole("guideuser"))
+                    {
+                        <button type="button" class="btn btn-info" onclick="openModal('/Tourist/Detail/@item.TouristId','Turist Detayı')">Detay</button>
+                    }
+
+                    @if (User.IsInRole("salesperson.editorupdate"))
+                    {
+                        <a role="button" class="btn btn-success" asp-action="Index" asp-controller="TourSelling" asp-route-id="@item.TouristId">Tur Satışı Yap</a>
+                    }
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+                    {
+                        <button type="button" class="btn btn-warning" onclick="openModal('/Tourist/Edit/@item.TouristId','Turist Güncelle')">Düzenle</button>
+                        <button type="button" class="btn btn-danger" onclick="openModal('/Tourist/Delete/@item.TouristId','Kaydı silmek istediğinizden emin misiniz?')">Sil</button>
+                    }
                 </td>
             </tr>
         }

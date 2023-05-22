@@ -40,7 +40,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(LanguageCreateOrEditViewModel languageViewModel)
         {
             var result = _languageService.Add(new Language()
@@ -76,7 +76,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, LanguageCreateOrEditViewModel languageViewModel)
         {
             if (id != languageViewModel.LanguageId) return NotFound();

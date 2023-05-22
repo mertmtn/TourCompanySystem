@@ -7,7 +7,9 @@ function submitForEdit() {
         CountryId: $("#CountryId").val(),
         NationalityId: $("#NationalityId").val(),
         Surname: $("#Surname").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+        BirthDate: $("#BirthDate").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -56,7 +58,9 @@ function submitForCreate() {
         CountryId: $("#CountryId").val(),
         NationalityId: $("#NationalityId").val(),
         Surname: $("#Surname").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+        BirthDate: $("#BirthDate").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({

@@ -34,23 +34,14 @@ namespace DataAccess.Concrete.EntityFramework
         }
 
         public DbSet<Guide> Guides { get; set; }
-
         public DbSet<Language> Languages { get; set; }
-
         public DbSet<Tourist> Tourists { get; set; }
-
         public DbSet<Place> Places { get; set; }
-
         public DbSet<Tour> Tours { get; set; }     
-
         public DbSet<Invoice> Invoices { get; set; }
-
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
-
         public DbSet<Country> Countries { get; set; }
-
         public DbSet<Nationality> Nationalities { get; set; }
-
         public DbSet<OperationClaim> OperationClaim { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }

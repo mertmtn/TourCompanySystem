@@ -1,15 +1,15 @@
 ﻿@{
     string claim = @Context.Session.GetString("UserClaim") ?? "";
 
-    if (claim == "superadmin")
+    if (claim.Contains("superadmin"))
     {
         @await Html.PartialAsync("_SuperAdminMenuPartial")
     }
-    else if (claim == "guideadmin")
+    else if (claim.Contains("guideuser"))
     {
         @await Html.PartialAsync("_GuideMenuPartial")
     }
-    else if (claim == "salesperson")
+    else if (claim.Contains("salesperson"))
     {
         @await Html.PartialAsync("_SalesPersonMenuPartial")
     }

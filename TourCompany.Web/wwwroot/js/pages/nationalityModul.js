@@ -1,9 +1,9 @@
 ﻿function submitForEdit() {
     var nationalityViewModel = {
         Name: $("#Name").val(),
-        NationalityId: $("#NationalityId").val(),
-        Price: $("#Price").val(),
-        IsActive: $("#IsActive").prop('checked')
+        NationalityId: $("#NationalityId").val(), 
+        IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -46,9 +46,9 @@
 function submitForCreate() {
 
     var nationalityViewModel = {
-        Name: $("#Name").val(),
-        Price: $("#Price").val(),
-        IsActive: $("#IsActive").prop('checked')
+        Name: $("#Name").val(), 
+        IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({

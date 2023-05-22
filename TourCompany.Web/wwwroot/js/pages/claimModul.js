@@ -2,7 +2,8 @@ function updateClaimForUser() {
 
     var userOperationClaimCreateOrUpdateViewModel = {         
         UserId: $("#UserId").val(),
-        SelectedClaims: $("#SelectedClaims").val()      
+        SelectedClaims: $("#SelectedClaims").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -47,7 +48,8 @@ function updateClaimForUser() {
 function submitForCreate() {
 
     var claimViewModel = {
-        Name: $("#Name").val()
+        Name: $("#Name").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({

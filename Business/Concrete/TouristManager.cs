@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
@@ -19,6 +20,7 @@ namespace Business.Concrete
             _touristDal = touristDal;
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         [ValidationAspect(typeof(TouristValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Tourist country)
@@ -27,21 +29,25 @@ namespace Business.Concrete
             return new SuccessResult(TouristMessage.TouristAddedSuccessfully, 200);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         public void Delete(Tourist country)
         {
             _touristDal.Delete(country);
         }
 
+   
         public List<Tourist> GetAll()
         {
             return _touristDal.GetAllTouristDetail();
         }
 
+       
         public Tourist GetById(int id)
         {
             return _touristDal.GetAllTouristDetailById(id);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         [ValidationAspect(typeof(TouristValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Update(Tourist tourist)
@@ -50,6 +56,7 @@ namespace Business.Concrete
             return new SuccessResult(TouristMessage.TouristUpdatedSuccessfully, 200);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,salesperson,salesperson.editorupdate")]
         public void UpdateForAddTours(int touristId, string[] selectedtours)
         {
             _touristDal.UpdateForAddTours(touristId, selectedtours);

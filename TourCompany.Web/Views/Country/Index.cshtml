@@ -1,22 +1,28 @@
 ﻿@model IEnumerable<Entities.Concrete.Country>
 
 @{
-    ViewData["Title"] = "Ülke Listesi | Tour Company";
+    ViewData["Title"] = "Ülke Listesi | Tour-Ist Company";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Ülke Listesi</h1>
 
-<p>
-    <button type="button" class="btn btn-primary" onclick="openModal('/Country/Create/','Yeni Ülke Tanım')">Yeni Ülke Ekle</button>
-</p>
+@if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+{
+    <p>
+        <button type="button" class="btn btn-primary" onclick="openModal('/Country/Create/','Yeni Ülke Tanım')">Yeni Ülke Ekle</button>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
                 Ülke Adı
             </th>
-            <th>İşlemler</th>
+            @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+            {
+                <th>İşlemler</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -26,9 +32,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
+
                 <td>
-                    <button role="button" class="btn  btn-warning" onclick="openModal('/Country/Edit/@item.CountryId','Ülke Düzenle')">Düzenle</button>
-                    <button class="btn btn-danger" onclick="openModal('/Country/Edit/@item.CountryId','Ülke Sil')">Sil</button>
+                    @if (User.IsInRole("superadmin.editorupdate") || User.IsInRole("salesperson.editorupdate"))
+                    {
+                        <button role="button" class="btn  btn-warning" onclick="openModal('/Country/Edit/@item.CountryId','Ülke Düzenle')">Düzenle</button>
+                        <button class="btn btn-danger" onclick="openModal('/Country/Delete/@item.CountryId','Ülke Sil')">Sil</button>
+                    }
                 </td>
             </tr>
         }

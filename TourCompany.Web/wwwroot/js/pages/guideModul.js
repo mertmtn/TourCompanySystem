@@ -7,7 +7,8 @@ function submitForEdit() {
         Gender: $("#Gender").val(),
         IsActive: $("#IsActive").prop('checked'),
         SelectedLanguages: $("#SelectedLanguages").val(),
-        GuideId: $("#GuideId").val()
+        GuideId: $("#GuideId").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -56,6 +57,7 @@ function submitForCreate() {
         Gender: $("#Gender").val(),
         IsActive: $("#IsActive").prop('checked'),
         SelectedLanguages: $("#SelectedLanguages").val(),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({

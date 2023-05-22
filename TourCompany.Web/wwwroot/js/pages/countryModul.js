@@ -3,7 +3,8 @@
     var countryViewModel = {
         Name: $("#Name").val(),
         CountryId: $("#CountryId").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -47,7 +48,8 @@ function submitForCreate() {
 
     var countryViewModel = {
         Name: $("#Name").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({

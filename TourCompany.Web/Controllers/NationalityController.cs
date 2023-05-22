@@ -36,11 +36,11 @@ namespace TourCompany.Web.Controllers
 
         public IActionResult Create()
         {
-            return PartialView("~/Views/Nationality/Partials/Create.cshtml");
+           return PartialView("~/Views/Nationality/Partials/Create.cshtml");
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(NationalityCreateOrEditViewModel nationalityViewModel)
         {
             var result = _nationalityService.Add(new Nationality()
@@ -75,7 +75,7 @@ namespace TourCompany.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id, NationalityCreateOrEditViewModel nationalityViewModel)
         {
             var result = _nationalityService.Update(new Nationality()

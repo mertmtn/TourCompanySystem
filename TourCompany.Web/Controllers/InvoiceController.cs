@@ -19,10 +19,9 @@ namespace TourCompany.Web.Controllers
 
         public ActionResult Index()
         {
-            var invoiceList = _invoiceService.GetAllInvoice();
+            var invoiceList = _invoiceService.GetAllInvoice().OrderByDescending(x=>x.InvoiceDate);
             return View(invoiceList);
         }
-
 
         public IActionResult Detail(string id)
         {

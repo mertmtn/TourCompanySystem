@@ -3,8 +3,8 @@ function submitForEdit() {
     var languageViewModel = {
         Name: $("#Name").val(),
         LanguageId: $("#LanguageId").val(),
-        Price: $("#Price").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+         __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({
@@ -47,8 +47,8 @@ function submitForCreate() {
 
     var languageViewModel = {
         Name: $("#Name").val(),
-        Price: $("#Price").val(),
-        IsActive: $("#IsActive").prop('checked')
+        IsActive: $("#IsActive").prop('checked'),
+        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
     };
 
     $.ajax({

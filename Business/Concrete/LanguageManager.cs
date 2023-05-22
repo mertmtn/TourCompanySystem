@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
@@ -19,6 +20,7 @@ namespace Business.Concrete
             _languageDal = placeDal;
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(LanguageValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Language language)
@@ -27,21 +29,25 @@ namespace Business.Concrete
             return new SuccessResult(LanguageMessage.LanguageAddedSuccessfully, 200);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public void Delete(Language language)
         {
             _languageDal.Delete(language);
         }
 
+       
         public List<Language> GetAll()
         {
             return _languageDal.GetAll();
         }
 
+   
         public Language GetById(int id)
         {
             return _languageDal.Get(p => p.LanguageId == id);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(LanguageValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Update(Language language)

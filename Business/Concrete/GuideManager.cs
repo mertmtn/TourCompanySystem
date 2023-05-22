@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
@@ -19,6 +20,7 @@ namespace Business.Concrete
             _guideDal = guideDal;
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate")]
         [ValidationAspect(typeof(GuideValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Guide guide, string[] selectedLanguages)
@@ -27,21 +29,25 @@ namespace Business.Concrete
             return new SuccessResult(GuideMessage.GuideAddedSuccessfully, 200);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate")]
         public void Delete(Guide guide)
         {
             _guideDal.DeleteManyLanguages(guide);
         }
 
+        
         public List<Guide> GetAll()
         {
             return _guideDal.GetAll();
         }
 
+      
         public Guide GetById(int id)
         {
             return _guideDal.GetById(id);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate,guideuser,guide.editorupdate")]
         [ValidationAspect(typeof(GuideValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Update(Guide guide, string[] selectedLanguages)

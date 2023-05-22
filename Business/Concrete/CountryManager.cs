@@ -7,6 +7,7 @@ using Core.Utilities.Results;
 using Core.Utilities.Results.Success;
 using Business.ValidationRules.FluentValidation;
 using Business.Constants.Messages;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
@@ -19,6 +20,8 @@ namespace Business.Concrete
             _countryDal = countryDal;
         }
 
+
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(CountryValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Add(Country country)
@@ -27,21 +30,25 @@ namespace Business.Concrete
             return new SuccessResult(CountryMessage.CountryAddedSuccessfully, 200);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public void Delete(Country country)
         {
             _countryDal.Delete(country);
         }
 
+    
         public List<Country> GetAll()
         {
             return _countryDal.GetAll();
         }
 
+  
         public Country GetById(int id)
         {
             return _countryDal.Get(p => p.CountryId == id);
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(CountryValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Update(Country country)
