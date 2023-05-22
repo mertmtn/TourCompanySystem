@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Exception;
@@ -22,6 +23,7 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(UserRegisterValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult Register(UserForRegisterDto userForRegisterDto)
@@ -47,17 +49,19 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(_userDal.Get(u => u.EMail == email));
         }
 
- 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll());
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public IDataResult<User> GetById(int userId)
         {
             return new SuccessDataResult<User>(_userDal.Get(c => c.Id == userId));
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         [ValidationAspect(typeof(UserUpdateValidator), Priority = 1)]
         [ExceptionAspect(typeof(Result))]
         public IResult UpdateUserInfo(User user)

@@ -35,13 +35,13 @@ namespace Business.Concrete
             _guideDal.DeleteManyLanguages(guide);
         }
 
-        
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public List<Guide> GetAll()
         {
             return _guideDal.GetAll();
         }
 
-      
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public Guide GetById(int id)
         {
             return _guideDal.GetById(id);

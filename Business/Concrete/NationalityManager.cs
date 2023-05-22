@@ -35,13 +35,13 @@ namespace Business.Concrete
             _nationalityDal.Delete(nationality);
         }
 
- 
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public List<Nationality> GetAll()
         {
            return _nationalityDal.GetAll();
         }
 
-       
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public Nationality GetById(int id)
         {
             return _nationalityDal.Get(x=>x.NationalityId==id);

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
@@ -16,6 +17,7 @@ namespace Business.Concrete
             _userOperationClaimDal = userOperationClaimDal;
         }
 
+        [SecuredOperation("superadmin,superadmin.editorupdate")]
         public IResult UpdateClaimForUser(UserOperationClaim userOperationClaim, string[] selectedClaims)
         {
             _userOperationClaimDal.UpdateClaimForUser(userOperationClaim, selectedClaims);

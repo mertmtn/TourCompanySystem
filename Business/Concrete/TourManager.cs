@@ -35,13 +35,13 @@ namespace Business.Concrete
             _tourDal.Delete(tour);
         }
 
-     
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public List<Tour> GetAll()
         {
             return _tourDal.GetAllJoinedTours();
         }
 
-  
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public Tour GetById(int id)
         {
             return _tourDal.GetById(id);

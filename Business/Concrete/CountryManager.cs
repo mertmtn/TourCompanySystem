@@ -36,13 +36,13 @@ namespace Business.Concrete
             _countryDal.Delete(country);
         }
 
-    
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public List<Country> GetAll()
         {
             return _countryDal.GetAll();
         }
 
-  
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public Country GetById(int id)
         {
             return _countryDal.Get(p => p.CountryId == id);

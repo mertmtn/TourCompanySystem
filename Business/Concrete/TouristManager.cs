@@ -35,13 +35,13 @@ namespace Business.Concrete
             _touristDal.Delete(country);
         }
 
-   
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public List<Tourist> GetAll()
         {
             return _touristDal.GetAllTouristDetail();
         }
 
-       
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public Tourist GetById(int id)
         {
             return _touristDal.GetAllTouristDetailById(id);

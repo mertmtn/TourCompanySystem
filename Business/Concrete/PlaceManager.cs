@@ -36,13 +36,13 @@ namespace Business.Concrete
             _placeDal.Delete(place);
         }
 
-      
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public List<Place> GetAll(Expression<Func<Place, bool>> filter = null)
         {
             return _placeDal.GetAll(filter);
         }
 
-       
+        [SecuredOperation("superadmin,superadmin.editorupdate,guide.editorupdate,salesperson.editorupdate,guideuser,salesperson")]
         public Place GetById(int id)
         {
             return _placeDal.Get(p => p.PlaceId == id);
