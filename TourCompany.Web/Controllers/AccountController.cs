@@ -8,18 +8,11 @@ using TourCompany.Web.Models.ViewModels;
 namespace TourCompany.Web.Controllers
 {
     [AllowAnonymous]
-    public class AccountController : Controller
+    public class AccountController(IAuthService authService, IUserService userService, INotyfService notyf) : Controller
     {
-        private IAuthService _authService;
-        private IUserService _userService;
-        private readonly INotyfService _notyf;
-
-        public AccountController(IAuthService authService, IUserService userService, INotyfService notyf)
-        {
-            _authService = authService;
-            _userService = userService;
-            _notyf = notyf;
-        }
+        private readonly IAuthService _authService = authService;
+        private readonly IUserService _userService = userService;
+        private readonly INotyfService _notyf = notyf;
 
         public ActionResult Login()
         {
